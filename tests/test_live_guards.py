@@ -1,32 +1,37 @@
 """Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# definition: test_host_refusal — line 55
-# parameter: ack — line 55
-# parameter: system — line 55
-# variable: run — line 59
-# definition: test_output_canonicalization — line 66
-# parameter: tmp_path — line 66
-# variable: bad — line 70
-# definition: test_declarative_audit_config — line 83
-# variable: text — line 85
-# definition: test_fixture_trace_privacy — line 95
-# parameter: capsys — line 95
-# variable: client — line 101
-# variable: text — line 111
-# definition: test_identity_guard — line 119
-# variable: owner — line 121
-# variable: name — line 122
-# variable: metadata — line 123
-# variable: bad — line 131
-# variable: target — line 131
-# definition: test_poll_and_port — line 141
-# definition: test_private_tls_tar — line 149
-# parameter: tmp_path — line 149
-# variable: cert — line 151
-# variable: key — line 151
-# variable: raw — line 154
-# variable: archive — line 155
-# variable: member — line 159
+# definition: test_host_refusal — line 61
+# parameter: ack — line 61
+# parameter: system — line 61
+# variable: run — line 65
+# definition: test_output_canonicalization — line 72
+# parameter: tmp_path — line 72
+# variable: bad — line 76
+# definition: test_declarative_audit_config — line 89
+# variable: text — line 91
+# definition: test_fixture_trace_privacy — line 101
+# parameter: capsys — line 101
+# variable: client — line 107
+# variable: text — line 117
+# definition: test_internal_database_address — line 125
+# variable: metadata — line 127
+# variable: network — line 131
+# variable: address — line 133
+# variable: altered — line 134
+# definition: test_identity_guard — line 152
+# variable: owner — line 154
+# variable: name — line 155
+# variable: metadata — line 156
+# variable: bad — line 164
+# variable: target — line 164
+# definition: test_poll_and_port — line 174
+# definition: test_private_tls_tar — line 182
+# parameter: tmp_path — line 182
+# variable: cert — line 184
+# variable: key — line 184
+# variable: raw — line 187
+# variable: archive — line 188
+# variable: member — line 192
 # END CODE MAP
 
 import io
@@ -41,6 +46,7 @@ from scripts.live_drill import (
     Docker,
     FixtureTransport,
     configuration,
+    database_address,
     output_directory,
     owned,
     port,
@@ -114,6 +120,33 @@ def test_fixture_trace_privacy(capsys):
         and "never-log-this-body" not in text
         and "fictional-token" not in text
     )
+
+
+def test_internal_database_address():
+    """Reject unrelated/public/multiple/published endpoints; only the checked internal subnet address is usable."""
+    metadata = {
+        "NetworkSettings": {"Networks": {"owned-net": {"IPAddress": "172.19.0.2"}}},
+        "HostConfig": {"PortBindings": {}},
+    }
+    network = {"Internal": True, "IPAM": {"Config": [{"Subnet": "172.19.0.0/16"}]}}
+    assert database_address(metadata, network, "owned-net") == "172.19.0.2"
+    for address in ["8.8.8.8", "127.0.0.1", "172.20.0.2", "::1"]:
+        altered = {
+            "NetworkSettings": {"Networks": {"owned-net": {"IPAddress": address}}},
+            "HostConfig": {"PortBindings": {}},
+        }
+        with pytest.raises(ValueError):
+            database_address(altered, network, "owned-net")
+    with pytest.raises(ValueError):
+        database_address(metadata, network | {"Internal": False}, "owned-net")
+    with pytest.raises(ValueError):
+        database_address(
+            metadata | {"HostConfig": {"PortBindings": {"5432/tcp": [{}]}}},
+            network,
+            "owned-net",
+        )
+    with pytest.raises(ValueError):
+        database_address(metadata, network, "wrong-net")
 
 
 def test_identity_guard():

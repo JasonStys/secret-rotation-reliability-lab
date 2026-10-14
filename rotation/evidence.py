@@ -137,7 +137,7 @@ def render(report: dict[str, Any]) -> str:
         "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'\">"
         "<title>Secret rotation reliability — Jason Stys</title><style>body{font:16px system-ui;max-width:960px;margin:2rem auto;padding:1rem;background:#101c2b;color:#e8f0fa}table{width:100%;border-collapse:collapse}td,th{padding:.7rem;text-align:left;border-bottom:1px solid #52708d}code{overflow-wrap:anywhere}a{color:#72d8cd}</style></head><body>"
         f"<h1>Secret rotation reliability lab</h1><p>Created by Jason Stys · {html.escape(value['mode'])} evidence</p>"
-        f"<p>Source: <code>{value['source_sha']}</code>. These are measured exercise results, not a production SLA or certification.</p>"
+        f"<p>Source: <code>{value['source_sha']}</code>. {'Synthetic cases with virtual elapsed time, not live-server measurements.' if value['mode'] == 'simulation' else 'Actual measured exercise results, not a production SLA or certification.'}</p>"
         '<table><caption>Credential lifecycle cases</caption><thead><tr><th scope="col">Case</th><th scope="col">Outcome</th><th scope="col">Duration (ms)</th></tr></thead><tbody>'
         + rows
         + '</tbody></table><p>Contact: <a href="https://github.com/JasonStys">JasonStys on GitHub</a>.</p></body></html>'

@@ -18,7 +18,7 @@ The single-flight lock serializes refresh. Lease time begins **before** the HTTP
 - New credentials on every request: correct but wastes manager/database capacity; single-flight cache issues once per generation.
 - Remote production manager/HA: meaningful future work, not implied by this isolated experiment.
 
-The fixed numeric-loopback transport removes DNS/proxy/redirect exfiltration surfaces but is deliberately not a production remote adapter. The live OpenBao process binds loopback and is terminated via its owned process handle; the one owned database container is non-root/read-only/capability-dropped and uses resource-bounded tmpfs on an owned internal bridge with loopback-only port publication. TLS uses generated local trust, not certificate-verification bypass. The in-memory, one-share bootstrap loses all manager state on exit and is not an HA/backup/auto-unseal strategy.
+The fixed numeric-loopback manager transport removes DNS/proxy/redirect exfiltration surfaces but is deliberately not a production remote adapter. The live OpenBao process binds loopback and is terminated via its owned process handle. The database container is non-root/read-only/capability-dropped and uses resource-bounded tmpfs on an owned internal bridge with **no published database port**. Native clients use only its freshly identity-checked private IPv4 address inside the exact owned subnet; certificate SAN and verify-full checks match that address. TLS uses generated local trust, not certificate-verification bypass. The in-memory, one-share bootstrap loses all manager state on exit and is not an HA/backup/auto-unseal strategy.
 
 ## Cost and complexity
 
