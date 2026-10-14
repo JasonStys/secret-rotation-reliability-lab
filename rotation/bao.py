@@ -38,24 +38,24 @@
 # attribute: response_flags — line 153
 # variable: label — line 155
 # variable: phrase — line 155
-# variable: raw — line 174
-# attribute: response_stage — line 175
-# variable: result — line 180
-# attribute: response_stage — line 183
-# definition: BaoProvider — line 197
-# definition: __init__ — line 200
-# parameter: clock — line 201
-# parameter: self — line 201
-# parameter: transport — line 201
-# attribute: transport — line 204
-# attribute: clock — line 205
-# definition: issue — line 207
-# parameter: self — line 207
-# variable: start — line 209
-# variable: reply — line 210
-# variable: data — line 212
-# variable: renewable — line 215
-# variable: ttl — line 215
+# variable: raw — line 175
+# attribute: response_stage — line 176
+# variable: result — line 181
+# attribute: response_stage — line 184
+# definition: BaoProvider — line 198
+# definition: __init__ — line 201
+# parameter: clock — line 202
+# parameter: self — line 202
+# parameter: transport — line 202
+# attribute: transport — line 205
+# attribute: clock — line 206
+# definition: issue — line 208
+# parameter: self — line 208
+# variable: start — line 210
+# variable: reply — line 211
+# variable: data — line 213
+# variable: renewable — line 216
+# variable: ttl — line 216
 # END CODE MAP
 
 from __future__ import annotations
@@ -162,6 +162,7 @@ class Transport:
                         (b"invalid", "invalid"),
                         (b"failed", "failed"),
                         (b"exists", "exists"),
+                        (b"cannot enable audit device via api", "audit-api-disabled"),
                     ]
                     if phrase in failure_body
                 ]
