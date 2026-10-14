@@ -1,21 +1,23 @@
 """Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 30
-# definition: main — line 33
-# variable: source — line 35
-# variable: directory — line 36
-# variable: report — line 39
-# variable: process — line 40
-# variable: value — line 60
-# variable: results — line 61
-# variable: result — line 63
-# variable: findings — line 66
-# variable: key — line 69
-# variable: result — line 77
-# variable: finding — line 78
-# variable: result — line 89
-# variable: result — line 90
-# variable: result — line 100
+# variable: ROOT — line 32
+# definition: main — line 35
+# variable: source — line 37
+# variable: directory — line 38
+# variable: report — line 41
+# variable: process — line 42
+# variable: value — line 62
+# variable: results — line 63
+# variable: result — line 65
+# variable: findings — line 68
+# variable: key — line 71
+# variable: result — line 79
+# variable: finding — line 80
+# variable: result — line 91
+# variable: result — line 92
+# variable: result — line 102
+# variable: receipt — line 108
+# variable: result — line 113
 # END CODE MAP
 
 from __future__ import annotations
@@ -102,6 +104,17 @@ def main() -> int:
                 "high_critical": 0,
             }
         )
+    )
+    receipt = {
+        "source_sha": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, timeout=10
+        ).strip(),
+        "binary_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        "go_packages_scanned": sum(len(result["Packages"]) for result in results),
+        "high_critical": 0,
+    }
+    (ROOT / ".tools/bao-scan.json").write_text(
+        json.dumps(receipt, sort_keys=True) + "\n", encoding="utf-8", newline="\n"
     )
     return 0
 

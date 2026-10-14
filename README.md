@@ -77,6 +77,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/runbook.md](docs/runbook.md) | Runbook: safe local demonstration and owned live exercise. |
 | [docs/testing.md](docs/testing.md) | Test strategy and reproducible validation. |
 | [docs/threat-model.md](docs/threat-model.md) | Threat model and deployment limits. |
+| [docs/upstream-security.md](docs/upstream-security.md) | Reviewed upstream security rebuild. |
 | [ops/reader.hcl](ops/reader.hcl) | Jason Stys: application token can issue ONLY reader credentials; everything else remains default-deny. |
 | [ops/start-postgres.sh](ops/start-postgres.sh) | Jason Stys: bounded wait for owned, generated TLS fixture files, then exec the native PostgreSQL entrypoint. |
 | [pyproject.toml](pyproject.toml) | Strict lint/type/test/statement-and-branch coverage configuration. |
@@ -94,6 +95,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [scripts/\_\_init\_\_.py](scripts/__init__.py) | Opt-in disposable exercise and maintained-repository helpers by Jason Stys; no import-time I/O. |
 | [scripts/bao\_check.py](scripts/bao_check.py) | Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys. |
 | [scripts/benchmark.py](scripts/benchmark.py) | Measure warmed cached broker decisions with an independent one-issuance oracle. Created by Jason Stys. |
+| [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed Go/x-net security fixes, never suppressing advisories. Created by Jason Stys. |
 | [scripts/code\_map.py](scripts/code_map.py) | Generate/check exact Python, SQL, shell and YAML symbol positions. Created by Jason Stys. |
 | [scripts/file\_guide.py](scripts/file_guide.py) | Maintain a complete tracked-file README purpose inventory; unknown file types fail closed. Created by Jason Stys. |
 | [scripts/image\_check.py](scripts/image_check.py) | Build/scan a non-root-only image from the immutable official PostgreSQL base; do not suppress vulnerabilities. Jason Stys. |

@@ -2,8 +2,9 @@
   "schema": 1,
   "reviewed": "2026-10-14",
   "postgres_image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+  "openbao_build": {"tag":"v2.7.1","upstream_commit":"a5db72cef75c24b920ade02065b18dd8eb666bac","go_version":"go1.27.2","x_net":"v0.60.0","x_net_sum":"h1:79p50tfZlm0J9YfoDsSi639qSXNGVwEzOPLCxM2FsYU="},
+  "original_openbao_release": {"version":"2.7.1","url":"https://github.com/openbao/openbao/releases/download/v2.7.1/openbao_2.7.1_linux_amd64.tar.gz","sha256":"0e2f1ce10d124e03112b50dd2fbec6b78003783253bc3a91587938f39d1e2243","use":"Historical audit reference only; not executed by the accepted drill"},
   "tools": {
-    "bao": {"version":"2.7.1","url":"https://github.com/openbao/openbao/releases/download/v2.7.1/openbao_2.7.1_linux_amd64.tar.gz","sha256":"0e2f1ce10d124e03112b50dd2fbec6b78003783253bc3a91587938f39d1e2243"},
     "gitleaks": {"version":"8.30.1","url":"https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz","sha256":"551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"},
     "trivy": {"version":"0.75.0","url":"https://github.com/aquasecurity/trivy/releases/download/v0.75.0/trivy_0.75.0_Linux-64bit.tar.gz","sha256":"c6e65abddb348e25f10549df887045629cf28cc72453cd1c63acb717316b3f3f"},
     "actionlint": {"version":"1.7.12","url":"https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz","sha256":"8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"}

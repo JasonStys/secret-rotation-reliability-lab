@@ -6,23 +6,23 @@
 # parameter: name — line 44
 # variable: lock — line 46
 # variable: repositories — line 49
-# variable: prefix — line 55
-# variable: output — line 60
-# variable: digest — line 62
-# variable: total — line 63
-# variable: temporary — line 64
-# variable: archive_path — line 65
-# variable: response — line 67
-# variable: stream — line 68
-# variable: data — line 70
-# variable: total — line 71
-# variable: archive — line 78
-# variable: member — line 79
-# variable: source — line 82
-# variable: target — line 85
-# definition: main — line 92
-# variable: parser — line 94
-# variable: arguments — line 96
+# variable: prefix — line 54
+# variable: output — line 59
+# variable: digest — line 61
+# variable: total — line 62
+# variable: temporary — line 63
+# variable: archive_path — line 64
+# variable: response — line 66
+# variable: stream — line 67
+# variable: data — line 69
+# variable: total — line 70
+# variable: archive — line 77
+# variable: member — line 78
+# variable: source — line 81
+# variable: target — line 84
+# definition: main — line 91
+# variable: parser — line 93
+# variable: arguments — line 95
 # END CODE MAP
 
 from __future__ import annotations
@@ -50,7 +50,6 @@ def install(name: str) -> Path:
         "gitleaks": "gitleaks/gitleaks",
         "trivy": "aquasecurity/trivy",
         "actionlint": "rhysd/actionlint",
-        "bao": "openbao/openbao",
     }
     prefix = (
         f"https://github.com/{repositories[name]}/releases/download/v{lock['version']}/"
@@ -92,7 +91,7 @@ def install(name: str) -> Path:
 def main() -> int:
     """Install one allowlisted scanner; credentials and downloaded archive contents are not logged."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("name", choices=["gitleaks", "trivy", "actionlint", "bao"])
+    parser.add_argument("name", choices=["gitleaks", "trivy", "actionlint"])
     arguments = parser.parse_args()
     print(install(arguments.name))
     return 0

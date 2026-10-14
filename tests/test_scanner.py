@@ -59,6 +59,7 @@ def test_go_scan_mode_and_inventory(tmp_path: Path, results, accepted):
     with (
         patch.object(bao_check, "ROOT", tmp_path),
         patch.object(bao_check.subprocess, "run", side_effect=scan),
+        patch.object(bao_check.subprocess, "check_output", return_value="a" * 40),
     ):
         if accepted:
             assert bao_check.main() == 0
