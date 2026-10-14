@@ -1,48 +1,61 @@
 """Verified TLS, no redirects/proxies, bounded OpenBao JSON and safe provider errors. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: MAX_BODY — line 61
-# definition: unique — line 64
-# parameter: pairs — line 64
-# variable: result — line 66
-# variable: key — line 67
-# variable: value — line 67
-# definition: invalid_constant — line 74
-# parameter: value — line 74
-# definition: Transport — line 79
-# definition: __init__ — line 82
-# parameter: ca — line 82
-# parameter: endpoint — line 82
-# parameter: self — line 82
-# parameter: token — line 82
-# variable: parsed — line 84
-# attribute: port — line 98
-# attribute: _token — line 99
-# attribute: _context — line 100
-# attribute: minimum_version — line 101
-# definition: request — line 103
-# parameter: body — line 104
-# parameter: method — line 104
-# parameter: path — line 104
-# parameter: self — line 104
-# variable: payload — line 113
-# variable: connection — line 118
-# variable: response — line 131
-# variable: raw — line 138
-# variable: result — line 143
-# definition: BaoProvider — line 159
-# definition: __init__ — line 162
-# parameter: clock — line 163
-# parameter: self — line 163
-# parameter: transport — line 163
-# attribute: transport — line 166
-# attribute: clock — line 167
-# definition: issue — line 169
-# parameter: self — line 169
-# variable: start — line 171
-# variable: reply — line 172
-# variable: data — line 174
-# variable: renewable — line 177
-# variable: ttl — line 177
+# variable: MAX_BODY — line 74
+# definition: unique — line 77
+# parameter: pairs — line 77
+# variable: result — line 79
+# variable: key — line 80
+# variable: value — line 80
+# definition: invalid_constant — line 87
+# parameter: value — line 87
+# definition: Transport — line 92
+# definition: __init__ — line 95
+# parameter: ca — line 95
+# parameter: endpoint — line 95
+# parameter: self — line 95
+# parameter: token — line 95
+# variable: parsed — line 97
+# attribute: port — line 111
+# attribute: _token — line 112
+# attribute: response_status — line 113
+# attribute: response_stage — line 114
+# attribute: response_flags — line 115
+# attribute: _context — line 116
+# attribute: minimum_version — line 117
+# definition: request — line 119
+# parameter: body — line 120
+# parameter: method — line 120
+# parameter: path — line 120
+# parameter: self — line 120
+# variable: payload — line 129
+# variable: connection — line 134
+# attribute: response_flags — line 137
+# attribute: response_stage — line 137
+# attribute: response_status — line 137
+# variable: response — line 148
+# attribute: response_status — line 149
+# variable: failure_body — line 152
+# attribute: response_flags — line 153
+# variable: label — line 155
+# variable: phrase — line 155
+# variable: raw — line 174
+# attribute: response_stage — line 175
+# variable: result — line 180
+# attribute: response_stage — line 183
+# definition: BaoProvider — line 197
+# definition: __init__ — line 200
+# parameter: clock — line 201
+# parameter: self — line 201
+# parameter: transport — line 201
+# attribute: transport — line 204
+# attribute: clock — line 205
+# definition: issue — line 207
+# parameter: self — line 207
+# variable: start — line 209
+# variable: reply — line 210
+# variable: data — line 212
+# variable: renewable — line 215
+# variable: ttl — line 215
 # END CODE MAP
 
 from __future__ import annotations
@@ -97,6 +110,9 @@ class Transport:
             secret(token)
         self.port = parsed.port
         self._token = token
+        self.response_status = 0
+        self.response_stage = "idle"
+        self.response_flags: list[str] = []
         self._context = ssl.create_default_context(cafile=str(ca))
         self._context.minimum_version = ssl.TLSVersion.TLSv1_2
 
@@ -118,6 +134,7 @@ class Transport:
         connection = http.client.HTTPSConnection(
             "127.0.0.1", self.port, context=self._context, timeout=2
         )
+        self.response_status, self.response_stage, self.response_flags = 0, "status", []
         try:
             connection.request(
                 method,
@@ -129,6 +146,25 @@ class Transport:
                 },
             )
             response = connection.getresponse()
+            self.response_status = response.status
+            if response.status >= 400:
+                # Only fixed presence labels survive. No raw backend message/body is stored or logged.
+                failure_body = response.read(MAX_BODY + 1).lower()
+                self.response_flags = [
+                    label
+                    for phrase, label in [
+                        (b"permission denied", "permission"),
+                        (b"unsupported", "unsupported"),
+                        (b"audit", "audit"),
+                        (b"file", "file"),
+                        (b"format", "format"),
+                        (b"parse", "parse"),
+                        (b"invalid", "invalid"),
+                        (b"failed", "failed"),
+                        (b"exists", "exists"),
+                    ]
+                    if phrase in failure_body
+                ]
             if response.status in {401, 403}:
                 raise ProviderError("denied")
             if response.status == 429 or response.status >= 500:
@@ -136,6 +172,7 @@ class Transport:
             if response.status not in {200, 204}:
                 raise ProviderError("invalid")
             raw = response.read(MAX_BODY + 1)
+            self.response_stage = "body"
             if len(raw) > MAX_BODY:
                 raise ProviderError("invalid")
             if not raw and response.status == 204:
@@ -143,6 +180,7 @@ class Transport:
             result: object = json.loads(
                 raw, object_pairs_hook=unique, parse_constant=invalid_constant
             )
+            self.response_stage = "object"
             if not isinstance(result, dict):
                 raise ProviderError("invalid")
             return result
