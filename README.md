@@ -72,6 +72,12 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [SECURITY.md](SECURITY.md) | Security policy. |
 | [docs/architecture.md](docs/architecture.md) | ADR-001: delegated secrets management with a conservative consumer. |
 | [docs/contracts.md](docs/contracts.md) | Lifecycle, data and privacy contracts. |
+| [docs/reports/benchmark.json](docs/reports/benchmark.json) | Actual warmed broker benchmark with a one-issuance oracle. |
+| [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
+| [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
+| [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
+| [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
+| [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
 | [docs/reports/validation.md](docs/reports/validation.md) | Measured validation and author review. |
 | [docs/research.md](docs/research.md) | Primary-source research and implementation choices. |
 | [docs/runbook.md](docs/runbook.md) | Runbook: safe local demonstration and owned live exercise. |

@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "mode": "live",
+  "source_sha": "9de4b265381a8820c86ed81c6cebf10d515a7653",
+  "cases": [
+    {
+      "name": "tls",
+      "passed": true,
+      "duration_ms": 2.555
+    },
+    {
+      "name": "bootstrap",
+      "passed": true,
+      "duration_ms": 45.883
+    },
+    {
+      "name": "acl",
+      "passed": true,
+      "duration_ms": 11.195
+    },
+    {
+      "name": "readonly",
+      "passed": true,
+      "duration_ms": 19.376
+    },
+    {
+      "name": "renewal",
+      "passed": true,
+      "duration_ms": 14.072
+    },
+    {
+      "name": "overlap",
+      "passed": true,
+      "duration_ms": 19.595
+    },
+    {
+      "name": "revocation",
+      "passed": true,
+      "duration_ms": 33.144
+    },
+    {
+      "name": "expiry",
+      "passed": true,
+      "duration_ms": 4070.856
+    },
+    {
+      "name": "root_rotation",
+      "passed": true,
+      "duration_ms": 68.365
+    },
+    {
+      "name": "outage_grace",
+      "passed": true,
+      "duration_ms": 2013.174
+    },
+    {
+      "name": "outage_expiry",
+      "passed": true,
+      "duration_ms": 3978.37
+    },
+    {
+      "name": "recovery",
+      "passed": true,
+      "duration_ms": 24.904
+    },
+    {
+      "name": "identity_revocation",
+      "passed": true,
+      "duration_ms": 27.347
+    },
+    {
+      "name": "redaction",
+      "passed": true,
+      "duration_ms": 1.414
+    },
+    {
+      "name": "cleanup",
+      "passed": true,
+      "duration_ms": 190.47
+    }
+  ],
+  "metrics": {
+    "requests": 9,
+    "issues": 4,
+    "attempts": 7,
+    "fallbacks": 1,
+    "denials": 1,
+    "invalidations": 0
+  }
+}

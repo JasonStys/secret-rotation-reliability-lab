@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "mode": "simulation",
+  "source_sha": "9de4b265381a8820c86ed81c6cebf10d515a7653",
+  "cases": [
+    {
+      "name": "cache",
+      "passed": true,
+      "duration_ms": 0
+    },
+    {
+      "name": "rotation",
+      "passed": true,
+      "duration_ms": 0
+    },
+    {
+      "name": "retry",
+      "passed": true,
+      "duration_ms": 50
+    },
+    {
+      "name": "grace",
+      "passed": true,
+      "duration_ms": 50
+    },
+    {
+      "name": "expiry",
+      "passed": true,
+      "duration_ms": 50
+    },
+    {
+      "name": "denied",
+      "passed": true,
+      "duration_ms": 0
+    },
+    {
+      "name": "stale_invalidation",
+      "passed": true,
+      "duration_ms": 0
+    },
+    {
+      "name": "redaction",
+      "passed": true,
+      "duration_ms": 0
+    }
+  ],
+  "metrics": {
+    "requests": 10,
+    "issues": 5,
+    "attempts": 11,
+    "fallbacks": 1,
+    "denials": 1,
+    "invalidations": 0
+  }
+}

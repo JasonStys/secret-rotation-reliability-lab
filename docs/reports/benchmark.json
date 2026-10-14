@@ -1,0 +1,18 @@
+{
+  "scope": "warmed local cached broker decision; no network/database",
+  "platform": "Windows",
+  "python": "3.14.6",
+  "batches": 5,
+  "decisions_per_batch": 1000,
+  "milliseconds_per_decision": [
+    0.0044305,
+    0.0040868,
+    0.0037121999999999997,
+    0.0037310999999999998,
+    0.0038837
+  ],
+  "median_ms": 0.0038837,
+  "peak_python_allocation_bytes": 600,
+  "issuances": 1,
+  "correctness_oracle": "all 5000 cached decisions return the identical initial lease"
+}

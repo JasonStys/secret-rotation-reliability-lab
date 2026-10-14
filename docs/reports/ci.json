@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "source_sha": "9de4b265381a8820c86ed81c6cebf10d515a7653",
+  "checked_at": "2026-10-14 04:41:25 UTC",
+  "native_tests_per_lane": 96,
+  "native_core_combined_statement_branch_coverage_percent": 98.83,
+  "coverage_scope": "rotation/ only; orchestration separately live-tested",
+  "validate": {
+    "conclusion": "success",
+    "created_at": "2026-10-14T04:33:24Z",
+    "head_sha": "9de4b265381a8820c86ed81c6cebf10d515a7653",
+    "html_url": "https://github.com/JasonStys/secret-rotation-reliability-lab/actions/runs/38511996896",
+    "id": 38511996896,
+    "name": "Validate",
+    "status": "completed",
+    "updated_at": "2026-10-14T04:37:18Z"
+  },
+  "codeql": {
+    "conclusion": "success",
+    "created_at": "2026-10-14T04:33:24Z",
+    "head_sha": "9de4b265381a8820c86ed81c6cebf10d515a7653",
+    "html_url": "https://github.com/JasonStys/secret-rotation-reliability-lab/actions/runs/38511996929",
+    "id": 38511996929,
+    "name": "CodeQL",
+    "status": "completed",
+    "updated_at": "2026-10-14T04:34:16Z"
+  },
+  "jobs": [
+    {
+      "conclusion": "success",
+      "id": 115682360804,
+      "name": "lifecycle"
+    },
+    {
+      "conclusion": "success",
+      "id": 115682360916,
+      "name": "Python 3.14 / windows-latest"
+    },
+    {
+      "conclusion": "success",
+      "id": 115682360980,
+      "name": "security"
+    },
+    {
+      "conclusion": "success",
+      "id": 115682361055,
+      "name": "Python 3.14 / macos-15-intel"
+    },
+    {
+      "conclusion": "success",
+      "id": 115682361066,
+      "name": "Python 3.14 / ubuntu-24.04"
+    },
+    {
+      "conclusion": "success",
+      "id": 115682361096,
+      "name": "Python 3.12 / ubuntu-24.04"
+    }
+  ],
+  "open_code_scanning_alerts": 0,
+  "actions_artifacts_uploaded": 0,
+  "actions_caches_created": 0,
+  "openbao": {
+    "upstream_sha": "a5db72cef75c24b920ade02065b18dd8eb666bac",
+    "go_version": "go1.27.2",
+    "x_net": "v0.60.0",
+    "binary_sha256": "41e1f7c63a6db24601f4d20612409d93fe94375533e4cd080e54d80aae7fccc9",
+    "packages_scanned": 292,
+    "high_critical": 0
+  },
+  "postgres": {
+    "image_id": "sha256:cff95c4df2c8d322377e5310676a47c91c8ce5cc9beeb96716c2fdd1e324e035",
+    "high_critical_gate": "PASS"
+  }
+}
