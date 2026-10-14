@@ -107,6 +107,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [tests/test\_contracts.py](tests/test_contracts.py) | Independent lease/policy boundary and fuzz/property tests; all values fictional. Created by Jason Stys. |
 | [tests/test\_evidence.py](tests/test_evidence.py) | Strict evidence schema, output privacy, real CLI control flow and aggregate negative tests. Jason Stys. |
 | [tests/test\_live\_guards.py](tests/test_live_guards.py) | Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys. |
+| [tests/test\_scanner.py](tests/test_scanner.py) | Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys. |
 | [tools.lock.json](tools.lock.json) | Exact official release hashes and immutable PostgreSQL base image. |
 
 <!-- END FILE GUIDE -->

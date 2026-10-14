@@ -1,23 +1,26 @@
 """Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# definition: test_host_refusal — line 36
-# parameter: ack — line 36
-# parameter: system — line 36
-# variable: run — line 40
-# definition: test_identity_guard — line 47
-# variable: owner — line 49
-# variable: name — line 50
-# variable: metadata — line 51
-# variable: bad — line 59
-# variable: target — line 59
-# definition: test_poll_and_port — line 69
-# definition: test_private_tls_tar — line 77
-# parameter: tmp_path — line 77
-# variable: cert — line 79
-# variable: key — line 79
-# variable: raw — line 82
-# variable: archive — line 83
-# variable: member — line 87
+# definition: test_host_refusal — line 47
+# parameter: ack — line 47
+# parameter: system — line 47
+# variable: run — line 51
+# definition: test_output_canonicalization — line 58
+# parameter: tmp_path — line 58
+# variable: bad — line 62
+# definition: test_identity_guard — line 75
+# variable: owner — line 77
+# variable: name — line 78
+# variable: metadata — line 79
+# variable: bad — line 87
+# variable: target — line 87
+# definition: test_poll_and_port — line 97
+# definition: test_private_tls_tar — line 105
+# parameter: tmp_path — line 105
+# variable: cert — line 107
+# variable: key — line 107
+# variable: raw — line 110
+# variable: archive — line 111
+# variable: member — line 115
 # END CODE MAP
 
 import io
@@ -27,7 +30,15 @@ from unittest.mock import patch
 
 import pytest
 
-from scripts.live_drill import LABEL, Docker, owned, port, tls_archive, wait
+from scripts.live_drill import (
+    LABEL,
+    Docker,
+    output_directory,
+    owned,
+    port,
+    tls_archive,
+    wait,
+)
 
 
 @pytest.mark.parametrize(
@@ -42,6 +53,23 @@ def test_host_refusal(system, ack):
         with pytest.raises(ValueError):
             Docker(ack)
         run.assert_not_called()
+
+
+def test_output_canonicalization(tmp_path: Path):
+    """Traversal, deep/unsafe components and symlink observations fail before output creation."""
+    with patch("scripts.live_drill.ROOT", tmp_path):
+        assert output_directory(tmp_path / "out/demo") == tmp_path / "out/demo"
+        for bad in [
+            tmp_path / "out/../../escape",
+            tmp_path / "out",
+            tmp_path / 'out/quote"injection',
+            tmp_path / "out/a/b/c/d",
+        ]:
+            with pytest.raises(ValueError):
+                output_directory(bad)
+        with patch.object(Path, "is_symlink", return_value=True):
+            with pytest.raises(ValueError):
+                output_directory(tmp_path / "out/demo")
 
 
 def test_identity_guard():

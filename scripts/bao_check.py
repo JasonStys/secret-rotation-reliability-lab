@@ -30,12 +30,12 @@ def main() -> int:
     source = ROOT / ".tools/bao"
     directory = ROOT / "out" / ("bao-scan-" + uuid.uuid4().hex)
     directory.mkdir(parents=True, mode=0o700)
-    shutil.copyfile(source, directory / "bao")
+    shutil.copy2(source, directory / "bao")
     report = directory / "scan.json"
     subprocess.run(
         [
             str(ROOT / ".tools/trivy"),
-            "fs",
+            "rootfs",
             "--scanners",
             "vuln",
             "--severity",
