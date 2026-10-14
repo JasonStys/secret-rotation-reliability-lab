@@ -1,202 +1,207 @@
 """Real TLS OpenBao/PostgreSQL lifecycle on an acknowledged disposable Linux Docker host. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 226
-# variable: LABEL — line 227
-# definition: FixtureTransport — line 230
-# definition: request — line 233
-# parameter: body — line 234
-# parameter: method — line 234
-# parameter: path — line 234
-# parameter: self — line 234
-# definition: output_directory — line 275
-# parameter: path — line 275
-# variable: original — line 277
-# variable: parent — line 278
-# variable: allowed — line 280
-# variable: canonical — line 280
-# variable: relative — line 283
-# variable: part — line 285
-# definition: port — line 291
-# variable: connection — line 293
-# definition: configuration — line 298
-# parameter: audit_path — line 298
-# parameter: ca — line 298
-# parameter: endpoint — line 298
-# parameter: key — line 298
-# definition: owned — line 315
-# parameter: expected_name — line 316
-# parameter: metadata — line 316
-# parameter: network — line 316
-# parameter: owner — line 316
-# variable: name — line 319
-# variable: labels — line 320
-# definition: Docker — line 333
-# definition: __init__ — line 336
-# parameter: acknowledgment — line 336
-# parameter: self — line 336
-# attribute: owner — line 342
-# attribute: name — line 343
-# attribute: environment — line 344
-# variable: key — line 346
-# variable: value — line 346
-# attribute: argv — line 349
-# attribute: resources — line 350
-# definition: call — line 352
-# parameter: args — line 353
-# parameter: data — line 353
-# parameter: self — line 353
-# parameter: timeout — line 353
-# variable: result — line 356
-# definition: inspect — line 368
-# parameter: kind — line 368
-# parameter: name — line 368
-# parameter: self — line 368
-# variable: raw — line 372
-# variable: values — line 375
-# definition: cleanup — line 381
-# parameter: self — line 381
-# variable: kind — line 383
-# variable: name — line 383
-# variable: remaining — line 386
-# definition: certificate — line 401
-# parameter: directory — line 401
-# parameter: name — line 401
-# variable: cert — line 403
-# variable: key — line 403
-# variable: result — line 404
-# definition: tls_archive — line 433
-# parameter: cert — line 433
-# parameter: gid — line 433
-# parameter: key — line 433
-# parameter: uid — line 433
-# variable: output — line 435
-# variable: archive — line 436
-# variable: mode — line 437
-# variable: name — line 437
-# variable: path — line 437
-# variable: data — line 441
-# variable: entry — line 442
-# attribute: gid — line 443
-# attribute: mode — line 443
-# attribute: size — line 443
-# attribute: uid — line 443
-# definition: wait — line 448
-# parameter: operation — line 448
-# parameter: seconds — line 448
-# variable: deadline — line 450
-# definition: drill — line 458
-# parameter: acknowledgment — line 458
-# parameter: output — line 458
-# variable: docker — line 460
-# variable: sha — line 464
-# variable: image — line 467
-# variable: bao_scan — line 470
-# variable: bao_build — line 471
-# variable: binary_hash — line 472
-# variable: output — line 486
-# variable: private — line 487
-# variable: manager — line 490
-# variable: manager_log — line 491
-# variable: cases — line 492
-# variable: sensitive — line 493
-# variable: broker — line 494
-# variable: current_case — line 495
-# definition: case — line 497
-# parameter: name — line 497
-# parameter: operation — line 497
-# variable: current_case — line 500
-# variable: start — line 501
-# variable: result — line 503
-# variable: ca — line 512
-# variable: key — line 512
-# variable: db_ca — line 513
-# variable: db_key — line 513
-# variable: endpoint — line 514
-# variable: config — line 515
-# variable: manager_log — line 520
-# variable: manager — line 521
-# variable: anonymous — line 527
-# definition: ready — line 529
-# variable: initialized — line 537
-# variable: root_token — line 540
-# variable: unseal_key — line 540
-# variable: root — line 546
-# variable: audit_reply — line 547
-# variable: audit_data — line 548
-# definition: tls_proof — line 570
-# variable: wrong — line 572
-# variable: db_name — line 581
-# variable: network_name — line 581
-# variable: actor_password — line 593
-# variable: admin_password — line 593
-# variable: env_file — line 598
-# variable: identity — line 643
-# variable: metadata — line 649
-# variable: binding — line 650
-# variable: db_port — line 655
-# definition: connect — line 657
-# parameter: password — line 657
-# parameter: username — line 657
-# definition: db_ready — line 671
-# variable: connection — line 678
-# definition: bootstrap — line 685
-# variable: connection — line 687
-# variable: auth — line 733
-# variable: app_token — line 738
-# variable: app — line 740
-# variable: provider — line 741
-# variable: broker — line 742
-# definition: acl — line 744
-# variable: client — line 746
-# variable: method — line 746
-# variable: path — line 746
-# variable: payload — line 746
-# variable: first — line 760
-# definition: query — line 763
-# parameter: lease — line 763
-# variable: connection — line 765
-# definition: readonly — line 770
-# variable: connection — line 773
-# definition: renewal — line 783
-# variable: reply — line 785
-# variable: second — line 794
-# definition: overlap — line 797
-# definition: rejects — line 807
-# parameter: lease — line 807
-# variable: connection — line 817
-# definition: revocation — line 824
-# variable: short — line 850
-# definition: expiry — line 853
-# definition: absent — line 858
-# variable: connection — line 860
-# definition: root_rotation — line 871
-# variable: connection — line 873
-# variable: original — line 874
-# variable: connection — line 882
-# variable: replacement — line 890
-# variable: fresh — line 895
-# definition: outage_grace — line 901
-# definition: outage_expiry — line 908
-# definition: recovery — line 921
-# variable: recovered — line 923
-# definition: identity_revocation — line 930
-# variable: current — line 932
-# definition: redaction — line 944
-# variable: audit_path — line 947
-# variable: log — line 949
-# variable: value — line 950
-# variable: events — line 951
-# variable: line — line 951
-# variable: responses — line 952
-# variable: event — line 954
-# variable: event — line 962
-# variable: value — line 966
-# variable: manager_log — line 973
-# variable: manager — line 974
-# variable: report — line 976
-# definition: main — line 1006
-# variable: parser — line 1008
-# variable: args — line 1011
+# variable: ROOT — line 231
+# variable: LABEL — line 232
+# definition: FixtureTransport — line 235
+# definition: request — line 238
+# parameter: body — line 239
+# parameter: method — line 239
+# parameter: path — line 239
+# parameter: self — line 239
+# definition: output_directory — line 280
+# parameter: path — line 280
+# variable: original — line 282
+# variable: parent — line 283
+# variable: allowed — line 285
+# variable: canonical — line 285
+# variable: relative — line 288
+# variable: part — line 290
+# definition: port — line 296
+# variable: connection — line 298
+# definition: configuration — line 303
+# parameter: audit_path — line 303
+# parameter: ca — line 303
+# parameter: endpoint — line 303
+# parameter: key — line 303
+# definition: owned — line 320
+# parameter: expected_name — line 321
+# parameter: metadata — line 321
+# parameter: network — line 321
+# parameter: owner — line 321
+# variable: name — line 324
+# variable: labels — line 325
+# definition: Docker — line 338
+# definition: __init__ — line 341
+# parameter: acknowledgment — line 341
+# parameter: self — line 341
+# attribute: owner — line 347
+# attribute: name — line 348
+# attribute: environment — line 349
+# variable: key — line 351
+# variable: value — line 351
+# attribute: argv — line 354
+# attribute: resources — line 355
+# definition: call — line 357
+# parameter: args — line 358
+# parameter: data — line 358
+# parameter: self — line 358
+# parameter: timeout — line 358
+# variable: result — line 361
+# variable: stderr — line 370
+# variable: flags — line 371
+# variable: label — line 373
+# variable: phrase — line 373
+# definition: inspect — line 395
+# parameter: kind — line 395
+# parameter: name — line 395
+# parameter: self — line 395
+# variable: raw — line 399
+# variable: values — line 402
+# definition: cleanup — line 408
+# parameter: self — line 408
+# variable: kind — line 410
+# variable: name — line 410
+# variable: remaining — line 413
+# definition: certificate — line 428
+# parameter: directory — line 428
+# parameter: name — line 428
+# variable: cert — line 430
+# variable: key — line 430
+# variable: result — line 431
+# definition: tls_archive — line 460
+# parameter: cert — line 460
+# parameter: gid — line 460
+# parameter: key — line 460
+# parameter: uid — line 460
+# variable: output — line 462
+# variable: archive — line 463
+# variable: mode — line 464
+# variable: name — line 464
+# variable: path — line 464
+# variable: data — line 468
+# variable: entry — line 469
+# attribute: gid — line 470
+# attribute: mode — line 470
+# attribute: size — line 470
+# attribute: uid — line 470
+# definition: wait — line 475
+# parameter: operation — line 475
+# parameter: seconds — line 475
+# variable: deadline — line 477
+# definition: drill — line 485
+# parameter: acknowledgment — line 485
+# parameter: output — line 485
+# variable: docker — line 487
+# variable: sha — line 491
+# variable: image — line 494
+# variable: bao_scan — line 497
+# variable: bao_build — line 498
+# variable: binary_hash — line 499
+# variable: output — line 513
+# variable: private — line 514
+# variable: manager — line 517
+# variable: manager_log — line 518
+# variable: cases — line 519
+# variable: sensitive — line 520
+# variable: broker — line 521
+# variable: current_case — line 522
+# definition: case — line 524
+# parameter: name — line 524
+# parameter: operation — line 524
+# variable: current_case — line 527
+# variable: start — line 528
+# variable: result — line 530
+# variable: ca — line 539
+# variable: key — line 539
+# variable: db_ca — line 540
+# variable: db_key — line 540
+# variable: endpoint — line 541
+# variable: config — line 542
+# variable: manager_log — line 547
+# variable: manager — line 548
+# variable: anonymous — line 554
+# definition: ready — line 556
+# variable: initialized — line 564
+# variable: root_token — line 567
+# variable: unseal_key — line 567
+# variable: root — line 573
+# variable: audit_reply — line 574
+# variable: audit_data — line 575
+# definition: tls_proof — line 597
+# variable: wrong — line 599
+# variable: current_case — line 608
+# variable: db_name — line 609
+# variable: network_name — line 609
+# variable: actor_password — line 621
+# variable: admin_password — line 621
+# variable: env_file — line 626
+# variable: identity — line 671
+# variable: metadata — line 679
+# variable: binding — line 680
+# variable: db_port — line 685
+# definition: connect — line 687
+# parameter: password — line 687
+# parameter: username — line 687
+# definition: db_ready — line 701
+# variable: connection — line 708
+# definition: bootstrap — line 715
+# variable: connection — line 717
+# variable: auth — line 763
+# variable: app_token — line 768
+# variable: app — line 770
+# variable: provider — line 771
+# variable: broker — line 772
+# definition: acl — line 774
+# variable: client — line 776
+# variable: method — line 776
+# variable: path — line 776
+# variable: payload — line 776
+# variable: first — line 790
+# definition: query — line 793
+# parameter: lease — line 793
+# variable: connection — line 795
+# definition: readonly — line 800
+# variable: connection — line 803
+# definition: renewal — line 813
+# variable: reply — line 815
+# variable: second — line 824
+# definition: overlap — line 827
+# definition: rejects — line 837
+# parameter: lease — line 837
+# variable: connection — line 847
+# definition: revocation — line 854
+# variable: short — line 880
+# definition: expiry — line 883
+# definition: absent — line 888
+# variable: connection — line 890
+# definition: root_rotation — line 901
+# variable: connection — line 903
+# variable: original — line 904
+# variable: connection — line 912
+# variable: replacement — line 920
+# variable: fresh — line 925
+# definition: outage_grace — line 931
+# definition: outage_expiry — line 938
+# definition: recovery — line 951
+# variable: recovered — line 953
+# definition: identity_revocation — line 960
+# variable: current — line 962
+# definition: redaction — line 974
+# variable: audit_path — line 977
+# variable: log — line 979
+# variable: value — line 980
+# variable: events — line 981
+# variable: line — line 981
+# variable: responses — line 982
+# variable: event — line 984
+# variable: event — line 992
+# variable: value — line 996
+# variable: manager_log — line 1003
+# variable: manager — line 1004
+# variable: report — line 1006
+# definition: main — line 1036
+# variable: parser — line 1038
+# variable: args — line 1041
 # END CODE MAP
 
 from __future__ import annotations
@@ -362,6 +367,28 @@ class Docker:
             check=False,
         )
         if result.returncode:
+            stderr = result.stderr.lower()
+            flags = [
+                label
+                for phrase, label in [
+                    (b"permission", "permission"),
+                    (b"archive", "archive"),
+                    (b"mount", "mount"),
+                    (b"read-only", "read-only"),
+                    (b"invalid", "invalid"),
+                    (b"not found", "not-found"),
+                    (b"copy", "copy"),
+                    (b"network", "network"),
+                ]
+                if phrase in stderr
+            ]
+            print(
+                "OWNED_DOCKER_FAILURE "
+                + json.dumps(
+                    {"operation": args[0], "exit": result.returncode, "flags": flags}
+                ),
+                flush=True,
+            )
             raise RuntimeError("owned Docker operation failed")
         return result.stdout
 
@@ -578,6 +605,7 @@ def drill(output: Path, acknowledgment: bool) -> dict:
                 raise AssertionError("wrong TLS trust accepted")
 
         case("tls", tls_proof)
+        current_case = "bootstrap"
         db_name, network_name = docker.name + "-db", docker.name + "-net"
         docker.call(
             [
@@ -642,8 +670,10 @@ def drill(output: Path, acknowledgment: bool) -> dict:
         docker.resources.append(("container", db_name))
         identity = docker.call(["exec", db_name, "id", "-u"]).decode().strip()
         assert identity == "70"
+        # Docker cp cannot write tmpfs mounts. Transfer only our two generated files
+        # through stdin to tar running as the already verified non-root container user.
         docker.call(
-            ["cp", "--archive", "-", db_name + ":/tmp"],
+            ["exec", "-i", db_name, "tar", "-xpf", "-", "-C", "/tmp"],
             tls_archive(db_key, db_ca, 70, 70),
         )
         metadata = docker.inspect("container", db_name)
