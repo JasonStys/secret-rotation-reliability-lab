@@ -1,189 +1,195 @@
 """Real TLS OpenBao/PostgreSQL lifecycle on an acknowledged disposable Linux Docker host. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 213
-# variable: LABEL — line 214
-# definition: output_directory — line 217
-# parameter: path — line 217
-# variable: original — line 219
-# variable: parent — line 220
-# variable: allowed — line 222
-# variable: canonical — line 222
-# variable: relative — line 225
-# variable: part — line 227
-# definition: port — line 233
-# variable: connection — line 235
-# definition: owned — line 240
-# parameter: expected_name — line 241
-# parameter: metadata — line 241
-# parameter: network — line 241
-# parameter: owner — line 241
-# variable: name — line 244
-# variable: labels — line 245
-# definition: Docker — line 258
-# definition: __init__ — line 261
-# parameter: acknowledgment — line 261
-# parameter: self — line 261
-# attribute: owner — line 267
-# attribute: name — line 268
-# attribute: environment — line 269
-# variable: key — line 271
-# variable: value — line 271
-# attribute: argv — line 274
-# attribute: resources — line 275
-# definition: call — line 277
-# parameter: args — line 278
-# parameter: data — line 278
-# parameter: self — line 278
-# parameter: timeout — line 278
-# variable: result — line 281
-# definition: inspect — line 293
-# parameter: kind — line 293
-# parameter: name — line 293
-# parameter: self — line 293
-# variable: raw — line 297
-# variable: values — line 300
-# definition: cleanup — line 306
-# parameter: self — line 306
-# variable: kind — line 308
-# variable: name — line 308
-# variable: remaining — line 311
-# definition: certificate — line 326
-# parameter: directory — line 326
-# parameter: name — line 326
-# variable: cert — line 328
-# variable: key — line 328
-# variable: result — line 329
-# definition: tls_archive — line 358
-# parameter: cert — line 358
-# parameter: gid — line 358
-# parameter: key — line 358
-# parameter: uid — line 358
-# variable: output — line 360
-# variable: archive — line 361
-# variable: mode — line 362
-# variable: name — line 362
-# variable: path — line 362
-# variable: data — line 366
-# variable: entry — line 367
-# attribute: gid — line 368
-# attribute: mode — line 368
-# attribute: size — line 368
-# attribute: uid — line 368
-# definition: wait — line 373
-# parameter: operation — line 373
-# parameter: seconds — line 373
-# variable: deadline — line 375
-# definition: drill — line 383
-# parameter: acknowledgment — line 383
-# parameter: output — line 383
-# variable: docker — line 385
-# variable: sha — line 389
-# variable: image — line 392
-# variable: bao_scan — line 395
-# variable: bao_build — line 396
-# variable: binary_hash — line 397
-# variable: output — line 411
-# variable: private — line 412
-# variable: manager — line 415
-# variable: manager_log — line 416
-# variable: cases — line 417
-# variable: sensitive — line 418
-# variable: broker — line 419
-# variable: current_case — line 420
-# definition: case — line 422
-# parameter: name — line 422
-# parameter: operation — line 422
-# variable: current_case — line 425
-# variable: start — line 426
-# variable: result — line 428
-# variable: ca — line 437
-# variable: key — line 437
-# variable: db_ca — line 438
-# variable: db_key — line 438
-# variable: endpoint — line 439
-# variable: config — line 440
-# variable: manager_log — line 453
-# variable: manager — line 454
-# variable: anonymous — line 460
-# definition: ready — line 462
-# variable: initialized — line 470
-# variable: root_token — line 473
-# variable: unseal_key — line 473
-# variable: root — line 479
-# definition: tls_proof — line 492
-# variable: wrong — line 494
-# variable: db_name — line 503
-# variable: network_name — line 503
-# variable: actor_password — line 515
-# variable: admin_password — line 515
-# variable: env_file — line 520
-# variable: identity — line 565
-# variable: metadata — line 571
-# variable: binding — line 572
-# variable: db_port — line 577
-# definition: connect — line 579
-# parameter: password — line 579
-# parameter: username — line 579
-# definition: db_ready — line 593
-# variable: connection — line 600
-# definition: bootstrap — line 607
-# variable: connection — line 609
-# variable: auth — line 655
-# variable: app_token — line 660
-# variable: app — line 662
-# variable: provider — line 663
-# variable: broker — line 664
-# definition: acl — line 666
-# variable: client — line 668
-# variable: method — line 668
-# variable: path — line 668
-# variable: payload — line 668
-# variable: first — line 682
-# definition: query — line 685
-# parameter: lease — line 685
-# variable: connection — line 687
-# definition: readonly — line 692
-# variable: connection — line 695
-# definition: renewal — line 705
-# variable: reply — line 707
-# variable: second — line 716
-# definition: overlap — line 719
-# definition: rejects — line 729
-# parameter: lease — line 729
-# variable: connection — line 739
-# definition: revocation — line 746
-# variable: short — line 772
-# definition: expiry — line 775
-# definition: absent — line 780
-# variable: connection — line 782
-# definition: root_rotation — line 793
-# variable: connection — line 795
-# variable: original — line 796
-# variable: connection — line 804
-# variable: replacement — line 812
-# variable: fresh — line 817
-# definition: outage_grace — line 823
-# definition: outage_expiry — line 830
-# definition: recovery — line 843
-# variable: recovered — line 845
-# definition: identity_revocation — line 852
-# variable: current — line 854
-# definition: redaction — line 866
-# variable: audit_path — line 869
-# variable: log — line 871
-# variable: value — line 872
-# variable: events — line 873
-# variable: line — line 873
-# variable: responses — line 874
-# variable: event — line 876
-# variable: event — line 884
-# variable: value — line 888
-# variable: manager_log — line 895
-# variable: manager — line 896
-# variable: report — line 898
-# definition: main — line 928
-# variable: parser — line 930
-# variable: args — line 933
+# variable: ROOT — line 219
+# variable: LABEL — line 220
+# definition: FixtureTransport — line 223
+# definition: request — line 226
+# parameter: body — line 227
+# parameter: method — line 227
+# parameter: path — line 227
+# parameter: self — line 227
+# definition: output_directory — line 255
+# parameter: path — line 255
+# variable: original — line 257
+# variable: parent — line 258
+# variable: allowed — line 260
+# variable: canonical — line 260
+# variable: relative — line 263
+# variable: part — line 265
+# definition: port — line 271
+# variable: connection — line 273
+# definition: owned — line 278
+# parameter: expected_name — line 279
+# parameter: metadata — line 279
+# parameter: network — line 279
+# parameter: owner — line 279
+# variable: name — line 282
+# variable: labels — line 283
+# definition: Docker — line 296
+# definition: __init__ — line 299
+# parameter: acknowledgment — line 299
+# parameter: self — line 299
+# attribute: owner — line 305
+# attribute: name — line 306
+# attribute: environment — line 307
+# variable: key — line 309
+# variable: value — line 309
+# attribute: argv — line 312
+# attribute: resources — line 313
+# definition: call — line 315
+# parameter: args — line 316
+# parameter: data — line 316
+# parameter: self — line 316
+# parameter: timeout — line 316
+# variable: result — line 319
+# definition: inspect — line 331
+# parameter: kind — line 331
+# parameter: name — line 331
+# parameter: self — line 331
+# variable: raw — line 335
+# variable: values — line 338
+# definition: cleanup — line 344
+# parameter: self — line 344
+# variable: kind — line 346
+# variable: name — line 346
+# variable: remaining — line 349
+# definition: certificate — line 364
+# parameter: directory — line 364
+# parameter: name — line 364
+# variable: cert — line 366
+# variable: key — line 366
+# variable: result — line 367
+# definition: tls_archive — line 396
+# parameter: cert — line 396
+# parameter: gid — line 396
+# parameter: key — line 396
+# parameter: uid — line 396
+# variable: output — line 398
+# variable: archive — line 399
+# variable: mode — line 400
+# variable: name — line 400
+# variable: path — line 400
+# variable: data — line 404
+# variable: entry — line 405
+# attribute: gid — line 406
+# attribute: mode — line 406
+# attribute: size — line 406
+# attribute: uid — line 406
+# definition: wait — line 411
+# parameter: operation — line 411
+# parameter: seconds — line 411
+# variable: deadline — line 413
+# definition: drill — line 421
+# parameter: acknowledgment — line 421
+# parameter: output — line 421
+# variable: docker — line 423
+# variable: sha — line 427
+# variable: image — line 430
+# variable: bao_scan — line 433
+# variable: bao_build — line 434
+# variable: binary_hash — line 435
+# variable: output — line 449
+# variable: private — line 450
+# variable: manager — line 453
+# variable: manager_log — line 454
+# variable: cases — line 455
+# variable: sensitive — line 456
+# variable: broker — line 457
+# variable: current_case — line 458
+# definition: case — line 460
+# parameter: name — line 460
+# parameter: operation — line 460
+# variable: current_case — line 463
+# variable: start — line 464
+# variable: result — line 466
+# variable: ca — line 475
+# variable: key — line 475
+# variable: db_ca — line 476
+# variable: db_key — line 476
+# variable: endpoint — line 477
+# variable: config — line 478
+# variable: manager_log — line 491
+# variable: manager — line 492
+# variable: anonymous — line 498
+# definition: ready — line 500
+# variable: initialized — line 508
+# variable: root_token — line 511
+# variable: unseal_key — line 511
+# variable: root — line 517
+# definition: tls_proof — line 530
+# variable: wrong — line 532
+# variable: db_name — line 541
+# variable: network_name — line 541
+# variable: actor_password — line 553
+# variable: admin_password — line 553
+# variable: env_file — line 558
+# variable: identity — line 603
+# variable: metadata — line 609
+# variable: binding — line 610
+# variable: db_port — line 615
+# definition: connect — line 617
+# parameter: password — line 617
+# parameter: username — line 617
+# definition: db_ready — line 631
+# variable: connection — line 638
+# definition: bootstrap — line 645
+# variable: connection — line 647
+# variable: auth — line 693
+# variable: app_token — line 698
+# variable: app — line 700
+# variable: provider — line 701
+# variable: broker — line 702
+# definition: acl — line 704
+# variable: client — line 706
+# variable: method — line 706
+# variable: path — line 706
+# variable: payload — line 706
+# variable: first — line 720
+# definition: query — line 723
+# parameter: lease — line 723
+# variable: connection — line 725
+# definition: readonly — line 730
+# variable: connection — line 733
+# definition: renewal — line 743
+# variable: reply — line 745
+# variable: second — line 754
+# definition: overlap — line 757
+# definition: rejects — line 767
+# parameter: lease — line 767
+# variable: connection — line 777
+# definition: revocation — line 784
+# variable: short — line 810
+# definition: expiry — line 813
+# definition: absent — line 818
+# variable: connection — line 820
+# definition: root_rotation — line 831
+# variable: connection — line 833
+# variable: original — line 834
+# variable: connection — line 842
+# variable: replacement — line 850
+# variable: fresh — line 855
+# definition: outage_grace — line 861
+# definition: outage_expiry — line 868
+# definition: recovery — line 881
+# variable: recovered — line 883
+# definition: identity_revocation — line 890
+# variable: current — line 892
+# definition: redaction — line 904
+# variable: audit_path — line 907
+# variable: log — line 909
+# variable: value — line 910
+# variable: events — line 911
+# variable: line — line 911
+# variable: responses — line 912
+# variable: event — line 914
+# variable: event — line 922
+# variable: value — line 926
+# variable: manager_log — line 933
+# variable: manager — line 934
+# variable: report — line 936
+# definition: main — line 966
+# variable: parser — line 968
+# variable: args — line 971
 # END CODE MAP
 
 from __future__ import annotations
@@ -212,6 +218,38 @@ from rotation.evidence import write_report
 
 ROOT = Path(__file__).resolve().parents[1]
 LABEL = "rotation.lab.owner"
+
+
+class FixtureTransport(Transport):
+    """Fixture-only safe tracing; fixed paths never contain user identities or lease IDs."""
+
+    def request(
+        self, method: str, path: str, body: dict[str, object] | None = None
+    ) -> dict[str, object]:
+        """Trace reviewed operation names/error categories only; no payload, token or raw response messages."""
+        if path not in {
+            "sys/init",
+            "sys/unseal",
+            "sys/audit/file",
+            "sys/mounts/database",
+            "database/config/lab",
+            "database/roles/reader",
+            "sys/policies/acl/reader",
+            "auth/token/create",
+            "database/creds/reader",
+            "database/creds/other",
+            "sys/leases/revoke",
+            "sys/leases/renew",
+            "database/rotate-root/lab",
+            "auth/token/revoke",
+        }:
+            raise ValueError("unknown fixture operation")
+        print("FIXTURE_STEP " + method + " " + path, flush=True)
+        try:
+            return super().request(method, path, body)
+        except ProviderError as error:
+            print("FIXTURE_API_FAILURE " + path + " " + error.category, flush=True)
+            raise
 
 
 def output_directory(path: Path) -> Path:
@@ -457,7 +495,7 @@ def drill(output: Path, acknowledgment: bool) -> dict:
             stdout=manager_log,
             stderr=subprocess.STDOUT,
         )
-        anonymous = Transport(endpoint, ca)
+        anonymous = FixtureTransport(endpoint, ca)
 
         def ready() -> bool:
             """Check actual initialization endpoint, not merely a listening port; safe transient failures retry."""
@@ -476,9 +514,9 @@ def drill(output: Path, acknowledgment: bool) -> dict:
             anonymous.request("POST", "sys/unseal", {"key": unseal_key})["sealed"]
             is False
         )
-        root = Transport(endpoint, ca, root_token)
+        root = FixtureTransport(endpoint, ca, root_token)
         root.request(
-            "PUT",
+            "POST",
             "sys/audit/file",
             {
                 "type": "file",
@@ -659,7 +697,7 @@ def drill(output: Path, acknowledgment: bool) -> dict:
         )["auth"]
         app_token = auth["client_token"]
         sensitive.append(app_token)
-        app = Transport(endpoint, ca, app_token)
+        app = FixtureTransport(endpoint, ca, app_token)
         provider = BaoProvider(app)
         broker = Broker(provider, Policy(attempts=1))
 
@@ -705,7 +743,7 @@ def drill(output: Path, acknowledgment: bool) -> dict:
         def renewal() -> None:
             """Use actual returned TTL, not requested increment, and prove credentials still authorize fresh SQL."""
             reply = root.request(
-                "PUT",
+                "POST",
                 "sys/leases/renew",
                 {"lease_id": first.lease_id, "increment": "30s"},
             )
@@ -746,7 +784,7 @@ def drill(output: Path, acknowledgment: bool) -> dict:
         def revocation() -> None:
             """Revoke the exact former lease, confirm role removal and verify new credentials still work."""
             root.request(
-                "PUT", "sys/leases/revoke", {"lease_id": first.lease_id, "sync": True}
+                "POST", "sys/leases/revoke", {"lease_id": first.lease_id, "sync": True}
             )
             wait(lambda: rejects(first))
             query(second)
