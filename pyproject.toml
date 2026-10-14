@@ -1,0 +1,25 @@
+[project]
+name = "secret-rotation-reliability-lab"
+version = "1.0.0"
+description = "Bounded credential lifecycle and real OpenBao/PostgreSQL reliability exercises by Jason Stys"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["rotation"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = ["error"]
+[tool.coverage.run]
+branch = true
+source = ["rotation"]
+[tool.coverage.report]
+fail_under = 95
+show_missing = true

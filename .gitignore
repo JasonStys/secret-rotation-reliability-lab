@@ -1,0 +1,15 @@
+.venv/
+.tools/
+out/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+__pycache__/
+*.pyc
+.coverage*
+*.pem
+*.key
+*.env
+*.token
+*.password

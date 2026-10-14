@@ -1,0 +1,5 @@
+# No project source, tools, credentials or backup data enter the derived-image build context. Jason Stys.
+*
+!Dockerfile
+!ops/
+!ops/start-postgres.sh

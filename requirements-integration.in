@@ -1,0 +1,2 @@
+# Real database probe driver, only on the disposable hosted Linux integration runner.
+psycopg[binary]==3.3.6
