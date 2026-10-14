@@ -1,17 +1,18 @@
 """Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# definition: test_go_scan_mode_and_inventory — line 40
-# parameter: accepted — line 40
-# parameter: results — line 40
-# parameter: tmp_path — line 40
-# variable: tools — line 42
-# definition: scan — line 46
-# parameter: args — line 46
-# parameter: kwargs — line 46
+# definition: test_go_scan_mode_and_inventory — line 41
+# parameter: accepted — line 41
+# parameter: results — line 41
+# parameter: tmp_path — line 41
+# variable: tools — line 43
+# definition: scan — line 47
+# parameter: args — line 47
+# parameter: kwargs — line 47
 # END CODE MAP
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
@@ -49,10 +50,11 @@ def test_go_scan_mode_and_inventory(tmp_path: Path, results, accepted):
             args[1] == "rootfs"
             and args[args.index("--severity") + 1] == "HIGH,CRITICAL"
         )
-        assert kwargs["check"] is True and kwargs["timeout"] == 180
+        assert kwargs["check"] is False and kwargs["timeout"] == 180
         Path(args[args.index("--output") + 1]).write_text(
             json.dumps({"Results": results}), encoding="utf-8"
         )
+        return SimpleNamespace(returncode=0)
 
     with (
         patch.object(bao_check, "ROOT", tmp_path),

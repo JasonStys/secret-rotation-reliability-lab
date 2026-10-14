@@ -1,16 +1,21 @@
 """Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 25
-# definition: main — line 28
-# variable: source — line 30
-# variable: directory — line 31
-# variable: report — line 34
-# variable: value — line 55
-# variable: results — line 56
-# variable: result — line 58
+# variable: ROOT — line 30
+# definition: main — line 33
+# variable: source — line 35
+# variable: directory — line 36
+# variable: report — line 39
+# variable: process — line 40
+# variable: value — line 60
+# variable: results — line 61
 # variable: result — line 63
-# variable: result — line 64
-# variable: result — line 74
+# variable: findings — line 66
+# variable: key — line 69
+# variable: result — line 77
+# variable: finding — line 78
+# variable: result — line 89
+# variable: result — line 90
+# variable: result — line 100
 # END CODE MAP
 
 from __future__ import annotations
@@ -32,7 +37,7 @@ def main() -> int:
     directory.mkdir(parents=True, mode=0o700)
     shutil.copy2(source, directory / "bao")
     report = directory / "scan.json"
-    subprocess.run(
+    process = subprocess.run(
         [
             str(ROOT / ".tools/trivy"),
             "rootfs",
@@ -49,7 +54,7 @@ def main() -> int:
             str(report),
             str(directory),
         ],
-        check=True,
+        check=False,
         timeout=180,
     )
     value = json.loads(report.read_text(encoding="utf-8"))
@@ -58,8 +63,29 @@ def main() -> int:
         for result in value.get("Results", [])
         if result.get("Type") == "gobinary"
     ]
+    findings = [
+        {
+            key: finding.get(key, "")
+            for key in (
+                "VulnerabilityID",
+                "PkgName",
+                "Severity",
+                "InstalledVersion",
+                "FixedVersion",
+            )
+        }
+        for result in results
+        for finding in result.get("Vulnerabilities", [])
+    ]
+    print(
+        json.dumps(
+            {"go_inventory_files": len(results), "high_critical_findings": findings}
+        ),
+        flush=True,
+    )
     if (
-        not results
+        process.returncode != 0
+        or not results
         or not all(result.get("Packages") for result in results)
         or any(result.get("Vulnerabilities") for result in results)
     ):
