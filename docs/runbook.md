@@ -4,7 +4,7 @@ Author/contact: Jason Stys, [GitHub](https://github.com/JasonStys). Start with R
 
 ## Disposable Linux live run
 
-Do not run on this PC or a shared/production host. Required: dedicated Linux x86_64 Docker daemon at `/var/run/docker.sock`, Git, OpenSSL, Python3.14, Go1.27.2, network for reviewed dependency/source/image/scanner downloads. The fixture later uses only loopback/internal-network traffic. See [upstream security rebuild](upstream-security.md); this is not an official OpenBao release binary.
+Do not run on this PC or a shared/production host. Required: dedicated Linux x86_64 Docker daemon at `/var/run/docker.sock`, Git, OpenSSL, Python3.14, Go1.27.3, network for reviewed dependency/source/image/scanner downloads. The fixture later uses only loopback/internal-network traffic. See [upstream security rebuild](upstream-security.md); this is not an official OpenBao release binary.
 
 ```bash
 python -m pip install --require-hashes -r requirements-integration.lock

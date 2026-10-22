@@ -76,7 +76,7 @@ jobs:
       - run: python -m pip install --require-hashes -r requirements-integration.lock
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.27.2'
+          go-version: '1.27.3'
           cache: false
       - name: Pinned upstream source with reviewed compiler/module security updates
         run: python scripts/build_bao.py
