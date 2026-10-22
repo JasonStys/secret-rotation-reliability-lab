@@ -76,6 +76,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
+| [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
 | [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
 | [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
 | [docs/reports/validation.md](docs/reports/validation.md) | Measured validation and author review. |
