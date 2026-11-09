@@ -1,26 +1,31 @@
 """Independent rejection oracles for maintained manager module/checksum identity. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: SPEC — line 34
-# definition: build_info — line 39
-# variable: item — line 47
-# variable: name — line 47
-# definition: test_exact_compiled_graph_and_no_v3 — line 52
-# variable: info — line 54
-# variable: changed — line 56
-# definition: test_both_module_archive_and_metadata_checksum_required — line 67
-# variable: expected — line 69
-# variable: actual — line 70
-# variable: field — line 76
-# variable: changed — line 77
-# definition: test_only_exact_upstream_in_tree_replacements — line 83
-# parameter: capsys — line 83
-# variable: info — line 85
-# variable: name — line 86
-# variable: path — line 86
-# variable: info — line 87
-# variable: content — line 90
-# definition: test_safe_diagnostics_and_empty_metadata — line 99
-# variable: result — line 104
+# variable: SPEC — line 39
+# definition: build_info — line 44
+# variable: item — line 52
+# variable: name — line 52
+# definition: test_exact_compiled_graph_and_no_v3 — line 57
+# variable: info — line 59
+# variable: changed — line 61
+# definition: test_both_module_archive_and_metadata_checksum_required — line 72
+# variable: expected — line 74
+# variable: actual — line 75
+# variable: field — line 81
+# variable: changed — line 82
+# definition: test_only_exact_upstream_in_tree_replacements — line 88
+# parameter: capsys — line 88
+# variable: info — line 90
+# variable: name — line 91
+# variable: path — line 91
+# variable: info — line 92
+# variable: content — line 95
+# definition: test_safe_diagnostics_and_empty_metadata — line 104
+# variable: result — line 109
+# definition: test_reviewed_fail_closed_patch_identity — line 116
+# variable: patch — line 120
+# variable: content — line 121
+# variable: added — line 123
+# variable: line — line 125
 # END CODE MAP
 
 import copy
@@ -106,3 +111,24 @@ def test_safe_diagnostics_and_empty_metadata():
     )
     assert result["toolchain"] == "unrecognized"
     assert "private-token" not in json.dumps(result)
+
+
+def test_reviewed_fail_closed_patch_identity():
+    """The precise lab patch is locked and only added Okta behavior is explicit rejection plus an actual Go test."""
+    import hashlib
+
+    patch = SPEC["source_patches"][0]
+    content = (Path(__file__).resolve().parents[1] / patch["path"]).read_bytes()
+    assert hashlib.sha256(content).hexdigest() == patch["sha256"]
+    added = "\n".join(
+        line[1:]
+        for line in content.decode().splitlines()
+        if line.startswith("+") and not line.startswith("+++")
+    )
+    assert (
+        'return errors.New("Okta login MFA is unavailable in this lab build")' in added
+    )
+    assert "return nil" not in added and "TestLabOktaMFAUnavailable" in added
+    assert "var core *Core" in added and "context.WithCancel" in added
+    assert '-\t"github.com/okta/okta-sdk-golang/v2/okta"' in content.decode()
+    assert hashlib.sha256(content + b"tamper").hexdigest() != patch["sha256"]

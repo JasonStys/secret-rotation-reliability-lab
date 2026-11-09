@@ -1,2 +1,4 @@
 * text=auto eol=lf
 *.zip binary
+# Unified-diff context includes a literal prefix before upstream tabs/blank lines; preserve it verbatim.
+patches/*.patch -whitespace

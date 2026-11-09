@@ -4,22 +4,22 @@
 # variable: BEGIN — line 33
 # variable: END — line 33
 # variable: SPECIAL — line 34
-# definition: purpose — line 54
-# parameter: path — line 54
-# variable: source — line 58
-# variable: line — line 66
-# definition: main — line 72
-# variable: parser — line 74
-# variable: args — line 76
-# variable: files — line 77
-# variable: rows — line 85
-# variable: path — line 86
-# variable: label — line 87
-# variable: readme — line 89
-# variable: original — line 90
-# variable: end — line 91
-# variable: start — line 91
-# variable: expected — line 92
+# definition: purpose — line 55
+# parameter: path — line 55
+# variable: source — line 59
+# variable: line — line 67
+# definition: main — line 73
+# variable: parser — line 75
+# variable: args — line 77
+# variable: files — line 78
+# variable: rows — line 86
+# variable: path — line 87
+# variable: label — line 88
+# variable: readme — line 90
+# variable: original — line 91
+# variable: end — line 92
+# variable: start — line 92
+# variable: expected — line 93
 # END CODE MAP
 
 from __future__ import annotations
@@ -32,6 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BEGIN, END = "<!-- BEGIN FILE GUIDE -->", "<!-- END FILE GUIDE -->"
 SPECIAL = {
+    "patches/disable-unused-okta-mfa.patch": "Reviewed hash-bound upstream lab patch: unsupported Okta login MFA always rejects, removing obsolete SDK linkage; actual Go regression included.",
     ".gitignore": "Keep generated keys, credentials, logs, tools and working data untracked.",
     ".gitattributes": "Consistent LF source checkout across operating systems.",
     ".dockerignore": "Allow only Dockerfile and reviewed startup script into the image build.",

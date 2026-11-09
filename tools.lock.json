@@ -30,7 +30,14 @@
       "github.com/openbao/openbao/api/auth/userpass/v2": "./api/auth/userpass",
       "github.com/openbao/openbao/sdk/v2": "./sdk",
       "github.com/boltdb/bolt": "./internal/helper/stubbolt"
-    }
+    },
+    "source_patches": [
+      {
+        "path": "patches/disable-unused-okta-mfa.patch",
+        "sha256": "79e6ab9bdfac48808e3ee0ddd7b0d5c558b38ece5001a3478e63bb9da31a53ff",
+        "purpose": "Fail closed for unsupported unused Okta login MFA; remove obsolete SDK import, never bypass verification"
+      }
+    ]
   },
   "original_openbao_release": {
     "version": "2.7.1",

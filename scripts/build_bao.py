@@ -1,55 +1,57 @@
 """Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 66
-# definition: verify_module — line 69
-# parameter: expected — line 69
-# parameter: module — line 69
-# definition: build_identity — line 79
-# parameter: info — line 79
-# parameter: spec — line 79
-# variable: line — line 81
-# variable: lines — line 81
-# variable: dependencies — line 82
+# variable: ROOT — line 68
+# definition: verify_module — line 71
+# parameter: expected — line 71
+# parameter: module — line 71
+# definition: build_identity — line 81
+# parameter: info — line 81
+# parameter: spec — line 81
 # variable: line — line 83
-# variable: version — line 85
-# variable: failures — line 90
-# variable: item — line 95
-# variable: name — line 95
-# variable: previous — line 98
-# variable: reviewed_replacements — line 99
-# variable: line — line 100
-# variable: previous — line 102
-# variable: expected — line 104
-# variable: previous — line 109
-# variable: value — line 117
-# variable: name — line 119
-# definition: verify_build_info — line 127
-# parameter: info — line 127
-# parameter: spec — line 127
-# variable: identity — line 129
-# definition: main — line 135
-# variable: spec — line 141
-# variable: version — line 144
-# variable: tools — line 147
-# variable: directory — line 148
-# variable: environment — line 149
-# variable: key — line 151
-# variable: value — line 151
-# variable: commit — line 179
-# variable: modules — line 185
-# variable: item — line 190
-# variable: name — line 190
-# variable: item — line 200
-# variable: name — line 200
-# variable: module — line 201
-# variable: binary — line 232
-# variable: info — line 250
-# variable: identity — line 253
-# variable: why — line 255
-# variable: public — line 265
-# variable: line — line 267
-# variable: lab_sha — line 272
-# variable: receipt — line 275
+# variable: lines — line 83
+# variable: dependencies — line 84
+# variable: line — line 85
+# variable: version — line 87
+# variable: failures — line 92
+# variable: item — line 97
+# variable: name — line 97
+# variable: previous — line 100
+# variable: reviewed_replacements — line 101
+# variable: line — line 102
+# variable: previous — line 104
+# variable: expected — line 106
+# variable: previous — line 111
+# variable: value — line 119
+# variable: name — line 121
+# definition: verify_build_info — line 129
+# parameter: info — line 129
+# parameter: spec — line 129
+# variable: identity — line 131
+# definition: main — line 137
+# variable: spec — line 143
+# variable: version — line 146
+# variable: tools — line 149
+# variable: directory — line 150
+# variable: environment — line 151
+# variable: key — line 153
+# variable: value — line 153
+# variable: commit — line 181
+# variable: patch — line 186
+# variable: data — line 187
+# variable: modules — line 218
+# variable: item — line 223
+# variable: name — line 223
+# variable: item — line 233
+# variable: name — line 233
+# variable: module — line 234
+# variable: binary — line 283
+# variable: info — line 301
+# variable: identity — line 304
+# variable: why — line 306
+# variable: public — line 316
+# variable: line — line 318
+# variable: lab_sha — line 323
+# variable: receipt — line 326
 # END CODE MAP
 
 from __future__ import annotations
@@ -181,6 +183,37 @@ def main() -> int:
     ).strip()
     if commit != spec["upstream_commit"]:
         raise ValueError("upstream tag/commit mismatch")
+    for patch in spec["source_patches"]:
+        data = (ROOT / patch["path"]).read_bytes()
+        if hashlib.sha256(data).hexdigest() != patch["sha256"]:
+            raise ValueError("reviewed upstream patch checksum mismatch")
+        subprocess.run(
+            [
+                "git",
+                "apply",
+                "--check",
+                "--whitespace=error",
+                str(ROOT / patch["path"]),
+            ],
+            cwd=directory,
+            env=environment,
+            check=True,
+            timeout=15,
+        )
+        subprocess.run(
+            ["git", "apply", "--whitespace=error", str(ROOT / patch["path"])],
+            cwd=directory,
+            env=environment,
+            check=True,
+            timeout=15,
+        )
+    subprocess.run(
+        ["gofmt", "-w", "internal/vault/lab_okta_disabled_test.go"],
+        cwd=directory,
+        env=environment,
+        check=True,
+        timeout=15,
+    )
     # CAP's maintained v0.15 migration removes unpatched jose/v3; do not fork crypto or ignore it.
     modules = spec["modules"]
     subprocess.run(
@@ -228,6 +261,24 @@ def main() -> int:
         env=environment,
         check=True,
         timeout=660,
+    )
+    subprocess.run(
+        [
+            "go",
+            "test",
+            "-p",
+            "2",
+            "-short",
+            "-timeout",
+            "2m",
+            "-run",
+            "^TestLabOktaMFAUnavailable$",
+            "./internal/vault",
+        ],
+        cwd=directory,
+        env=environment,
+        check=True,
+        timeout=900,
     )
     binary = tools / "bao"
     subprocess.run(
@@ -279,7 +330,9 @@ def main() -> int:
         "go_version": spec["go_version"],
         "modules": modules,
         "compiled_identity": identity,
-        "upstream_auth_tests": "PASS jwt+kubernetes -short",
+        "upstream_auth_tests": "PASS jwt+kubernetes -short; vault lab Okta fail-closed",
+        "source_patches": spec["source_patches"],
+        "unsupported_integrations": ["Okta login MFA"],
         "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
         "go_mod_sha256": hashlib.sha256(
             (directory / "go.mod").read_bytes()

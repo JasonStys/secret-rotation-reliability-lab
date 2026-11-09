@@ -9,6 +9,8 @@ A defensive DevOps lab that tests what happens **after a database password chang
 
 This is an isolated learning/portfolio project, **not a production secrets service, military compliance certification, zero-downtime guarantee or authorization to touch someone else's infrastructure**. All data and credentials are fictional/disposable. The live drill refuses Windows/macOS and requires explicit acknowledgement on a disposable Linux Docker host. Local Docker Desktop is left unchanged.
 
+The reviewed CI manager is a **lab-maintained OpenBao rebuild** with an explicitly unsupported Okta login-MFA integration. That unused integration always returns an error; it cannot silently bypass MFA or authenticate. A hash-bound source patch removes the obsolete Okta SDK's vulnerable jose/v3 linkage, with an actual upstream-package fail-closed test before the unchanged binary scan and database lifecycle drill. Other authentication and PostgreSQL secret-engine paths retain their genuine upstream implementation. See [build scope and security correction](docs/upstream-security.md); this is not an upstream-signed full-feature release.
+
 ## Features and major functions
 
 | Component | What it demonstrates |
@@ -91,6 +93,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/upstream-security.md](docs/upstream-security.md) | Reviewed upstream security rebuild. |
 | [ops/reader.hcl](ops/reader.hcl) | Jason Stys: application token can issue ONLY reader credentials; everything else remains default-deny. |
 | [ops/start-postgres.sh](ops/start-postgres.sh) | Jason Stys: bounded wait for owned, generated TLS fixture files, then exec the native PostgreSQL entrypoint. |
+| [patches/disable-unused-okta-mfa.patch](patches/disable-unused-okta-mfa.patch) | Reviewed hash-bound upstream lab patch: unsupported Okta login MFA always rejects, removing obsolete SDK linkage; actual Go regression included. |
 | [pyproject.toml](pyproject.toml) | Strict lint/type/test/statement-and-branch coverage configuration. |
 | [requirements-dev.in](requirements-dev.in) | Exact portable development tool inputs. |
 | [requirements-dev.lock](requirements-dev.lock) | Complete hash-locked portable development graph. |
