@@ -1,0 +1,178 @@
+--- a/internal/vault/login_mfa.go
++++ b/internal/vault/login_mfa.go
+@@ -26,8 +26,6 @@
+ 	"github.com/hashicorp/go-hclog"
+ 	"github.com/hashicorp/go-memdb"
+ 	"github.com/hashicorp/go-multierror"
+-	"github.com/okta/okta-sdk-golang/v2/okta"
+-	"github.com/okta/okta-sdk-golang/v2/okta/query"
+ 	"github.com/openbao/openbao/sdk/v2/framework"
+ 	"github.com/openbao/openbao/sdk/v2/helper/identitytpl"
+ 	"github.com/openbao/openbao/sdk/v2/helper/jsonutil"
+@@ -1201,136 +1199,10 @@
+ 	}
+ }
+ 
++// Jason Stys: this narrowly scoped lab rebuild deliberately excludes the obsolete Okta SDK.
++// Always fail closed, including nil/canceled contexts; never bypass MFA or fall back to success.
+ func (c *Core) validateOkta(ctx context.Context, mConfig *mfa.Config, username string) error {
+-	oktaConfig := mConfig.GetOktaConfig()
+-	if oktaConfig == nil {
+-		return fmt.Errorf("failed to get Okta configuration for method %q", mConfig.Name)
+-	}
+-
+-	baseURL := oktaConfig.BaseURL
+-	if baseURL == "" {
+-		baseURL = "okta.com"
+-	}
+-	orgURL, err := url.Parse(fmt.Sprintf("https://%s.%s", oktaConfig.OrgName, baseURL))
+-	if err != nil {
+-		return err
+-	}
+-
+-	ctx, client, err := okta.NewClient(
+-		ctx,
+-		okta.WithToken(oktaConfig.APIToken),
+-		okta.WithOrgUrl(orgURL.String()),
+-		// Do not use cache or polling MFA will not refresh
+-		okta.WithCache(false),
+-	)
+-	if err != nil {
+-		return fmt.Errorf("error creating client: %s", err)
+-	}
+-
+-	filterField := "profile.login"
+-	if oktaConfig.PrimaryEmail {
+-		filterField = "profile.email"
+-	}
+-	filterQuery := fmt.Sprintf("%s eq %q", filterField, username)
+-	filter := query.NewQueryParams(query.WithFilter(filterQuery))
+-
+-	users, _, err := client.User.ListUsers(ctx, filter)
+-	if err != nil {
+-		return err
+-	}
+-	switch {
+-	case len(users) == 0:
+-		return errors.New("no users found for e-mail address")
+-	case len(users) > 1:
+-		return errors.New("more than one user found for e-mail address")
+-	}
+-
+-	user := users[0]
+-
+-	factors, _, err := client.UserFactor.ListFactors(ctx, user.Id)
+-	if err != nil {
+-		return err
+-	}
+-
+-	if len(factors) == 0 {
+-		return errors.New("no MFA factors found for user")
+-	}
+-
+-	var factorFound bool
+-	var userFactor *okta.UserFactor
+-	for _, factor := range factors {
+-		if factor.IsUserFactorInstance() {
+-			userFactor = factor.(*okta.UserFactor)
+-			if userFactor.FactorType == "push" {
+-				factorFound = true
+-				break
+-			}
+-		}
+-	}
+-
+-	if !factorFound {
+-		return errors.New("no push-type MFA factor found for user")
+-	}
+-
+-	result, _, err := client.UserFactor.VerifyFactor(ctx, user.Id, userFactor.Id, okta.VerifyFactorRequest{}, userFactor, nil)
+-	if err != nil {
+-		return err
+-	}
+-
+-	if result.FactorResult != "WAITING" {
+-		return fmt.Errorf("expected WAITING status for push status, got %q", result.FactorResult)
+-	}
+-
+-	// Parse links to get polling link
+-	type linksObj struct {
+-		Poll struct {
+-			Href string `mapstructure:"href"`
+-		} `mapstructure:"poll"`
+-	}
+-	links := new(linksObj)
+-	if err := mapstructure.WeakDecode(result.Links, links); err != nil {
+-		return err
+-	}
+-	// Strip the org URL from the fully qualified poll URL
+-	url, err := url.Parse(strings.Replace(links.Poll.Href, orgURL.String(), "", 1))
+-	if err != nil {
+-		return err
+-	}
+-
+-	for {
+-		// Okta provides an SDK method `GetFactorTransactionStatus` but does not provide the transaction id in
+-		// the VerifyFactor response. This code effectively reimplements that method.
+-		rq := client.CloneRequestExecutor()
+-		req, err := rq.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url.String(), nil)
+-		if err != nil {
+-			return err
+-		}
+-		var result *okta.VerifyUserFactorResponse
+-		_, err = rq.Do(ctx, req, &result)
+-		if err != nil {
+-			return err
+-		}
+-
+-		switch result.FactorResult {
+-		case "WAITING":
+-		case "SUCCESS":
+-			return nil
+-		case "REJECTED":
+-			return errors.New("push verification explicitly rejected")
+-		case "TIMEOUT":
+-			return errors.New("push verification timed out")
+-		default:
+-			return errors.New("unknown status code")
+-		}
+-		timer := time.NewTimer(time.Second)
+-
+-		select {
+-		case <-ctx.Done():
+-			timer.Stop()
+-			return errors.New("push verification operation canceled")
+-		case <-timer.C:
+-		}
+-	}
++	return errors.New("Okta login MFA is unavailable in this lab build")
+ }
+ 
+ func (c *Core) validatePingID(ctx context.Context, mConfig *mfa.Config, username string) error {
+--- /dev/null
++++ b/internal/vault/lab_okta_disabled_test.go
+@@ -0,0 +1,24 @@
++// Jason Stys: actual upstream-package fail-closed regression for the lab-only unsupported Okta boundary.
++package vault
++
++import (
++    "context"
++    "testing"
++
++    "github.com/openbao/openbao/v2/internal/helper/identity/mfa"
++)
++
++func TestLabOktaMFAUnavailable(t *testing.T) {
++    // A nil Core ensures no live service/client is touched; every call must reject, never authenticate.
++    var core *Core
++    canceled, cancel := context.WithCancel(context.Background())
++    cancel()
++    for _, ctx := range []context.Context{context.Background(), canceled} {
++        for _, config := range []*mfa.Config{nil, {Name: "fictional"}} {
++            err := core.validateOkta(ctx, config, "fictional-user")
++            if err == nil || err.Error() != "Okta login MFA is unavailable in this lab build" {
++                t.Fatal("unsupported Okta MFA must fail closed without service access or fallback")
++            }
++        }
++    }
++}

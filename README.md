@@ -9,6 +9,8 @@ A defensive DevOps lab that tests what happens **after a database password chang
 
 This is an isolated learning/portfolio project, **not a production secrets service, military compliance certification, zero-downtime guarantee or authorization to touch someone else's infrastructure**. All data and credentials are fictional/disposable. The live drill refuses Windows/macOS and requires explicit acknowledgement on a disposable Linux Docker host. Local Docker Desktop is left unchanged.
 
+The reviewed CI manager is a **lab-maintained OpenBao rebuild** with an explicitly unsupported Okta login-MFA integration. That unused integration always returns an error; it cannot silently bypass MFA or authenticate. A hash-bound source patch removes the obsolete Okta SDK's vulnerable jose/v3 linkage, with an actual upstream-package fail-closed test before the unchanged binary scan and database lifecycle drill. Other authentication and PostgreSQL secret-engine paths retain their genuine upstream implementation. See [build scope and security correction](docs/upstream-security.md); this is not an upstream-signed full-feature release.
+
 ## Features and major functions
 
 | Component | What it demonstrates |
@@ -16,6 +18,7 @@ This is an isolated learning/portfolio project, **not a production secrets servi
 | `Lease` / `Policy` | Printable bounded credentials, strict int/bool rules, finite settings, conservative monotonic deadlines and early refresh. |
 | `Broker.get` | One refresh for concurrent callers, finite capped retry, transient-only valid-cache fallback and strict expiry rejection. TLS/authorization/malformed-provider failures invalidate the cache immediately. |
 | `Broker.invalidate` | A late failure on an old lease cannot erase a newer generation. Consumers must close/drain their old database connections. |
+| [Multi-consumer handoff](docs/consumer-handoff.md) | Exact requested generation/object acknowledgement, per-consumer drain assertions, stale/replay rejection, overlap/outage/expiry work queues and a separate finite virtual-time demo. Broker refresh never implies every consumer switched. |
 | `Transport` / `BaoProvider.issue` | Verified TLS1.2+, numeric loopback-only URLs, no proxies/redirects, bounded JSON, duplicate-key rejection and safe error categories. |
 | Live drill | Real SCRAM/verify-full database connections, exact read-only permissions, overlapping identities, operator renewal, individual/TTL/token revocation, dedicated manager-password rotation, stopped-manager grace/expiry/recovery and HMAC audit verification. |
 | Evidence | Exact allowlisted aggregates and inert HTML; no passwords, tokens, lease IDs, raw logs or arbitrary provider messages can enter a report. |
@@ -71,12 +74,15 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [README.md](README.md) | Secret Rotation Reliability Lab. |
 | [SECURITY.md](SECURITY.md) | Security policy. |
 | [docs/architecture.md](docs/architecture.md) | ADR-001: delegated secrets management with a conservative consumer. |
+| [docs/consumer-handoff.md](docs/consumer-handoff.md) | Multi-consumer generation handoff. |
 | [docs/contracts.md](docs/contracts.md) | Lifecycle, data and privacy contracts. |
 | [docs/reports/benchmark.json](docs/reports/benchmark.json) | Actual warmed broker benchmark with a one-issuance oracle. |
 | [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
+| [docs/reports/handoff-2026-11-09.md](docs/reports/handoff-2026-11-09.md) | Multi-consumer handoff validation — 2026-11-09. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
 | [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
+| [docs/reports/security-repair-2026-11-09.md](docs/reports/security-repair-2026-11-09.md) | Maintained dependency repair validation — November 9, 2026. |
 | [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
 | [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
 | [docs/reports/validation.md](docs/reports/validation.md) | Measured validation and author review. |
@@ -87,6 +93,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/upstream-security.md](docs/upstream-security.md) | Reviewed upstream security rebuild. |
 | [ops/reader.hcl](ops/reader.hcl) | Jason Stys: application token can issue ONLY reader credentials; everything else remains default-deny. |
 | [ops/start-postgres.sh](ops/start-postgres.sh) | Jason Stys: bounded wait for owned, generated TLS fixture files, then exec the native PostgreSQL entrypoint. |
+| [patches/disable-unused-okta-mfa.patch](patches/disable-unused-okta-mfa.patch) | Reviewed hash-bound upstream lab patch: unsupported Okta login MFA always rejects, removing obsolete SDK linkage; actual Go regression included. |
 | [pyproject.toml](pyproject.toml) | Strict lint/type/test/statement-and-branch coverage configuration. |
 | [requirements-dev.in](requirements-dev.in) | Exact portable development tool inputs. |
 | [requirements-dev.lock](requirements-dev.lock) | Complete hash-locked portable development graph. |
@@ -98,11 +105,12 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [rotation/broker.py](rotation/broker.py) | Single-flight credential refresh with bounded retry, safe statistics and stale-lease guards. Jason Stys. |
 | [rotation/contracts.py](rotation/contracts.py) | Bounded lease/policy contracts; secret fields never enter representations. Created by Jason Stys. |
 | [rotation/evidence.py](rotation/evidence.py) | Allowlisted aggregate reports, inert escaped HTML and new-directory-only output. Created by Jason Stys. |
+| [rotation/handoff.py](rotation/handoff.py) | Generation-bound multi-consumer acknowledgements; credentials never enter status. Created by Jason Stys. |
 | [rotation/simulation.py](rotation/simulation.py) | Deterministic offline lifecycle demonstration, explicitly NOT live-manager evidence. Created by Jason Stys. |
 | [scripts/\_\_init\_\_.py](scripts/__init__.py) | Opt-in disposable exercise and maintained-repository helpers by Jason Stys; no import-time I/O. |
 | [scripts/bao\_check.py](scripts/bao_check.py) | Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys. |
 | [scripts/benchmark.py](scripts/benchmark.py) | Measure warmed cached broker decisions with an independent one-issuance oracle. Created by Jason Stys. |
-| [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed Go/x-net security fixes, never suppressing advisories. Created by Jason Stys. |
+| [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys. |
 | [scripts/code\_map.py](scripts/code_map.py) | Generate/check exact Python, SQL, shell and YAML symbol positions. Created by Jason Stys. |
 | [scripts/file\_guide.py](scripts/file_guide.py) | Maintain a complete tracked-file README purpose inventory; unknown file types fail closed. Created by Jason Stys. |
 | [scripts/image\_check.py](scripts/image_check.py) | Build/scan a non-root-only image from the immutable official PostgreSQL base; do not suppress vulnerabilities. Jason Stys. |
@@ -113,9 +121,12 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [sql/seed.sql](sql/seed.sql) | Jason Stys: fictional product inventory and dedicated non-superuser credential manager privileges. |
 | [tests/test\_bao.py](tests/test_bao.py) | Provider protocol and transport adversarial tests; fake sockets never access outside networks. Jason Stys. |
 | [tests/test\_broker.py](tests/test_broker.py) | Deterministic retry/expiry/identity/race tests plus actual concurrent single-flight threads. Jason Stys. |
+| [tests/test\_build\_diagnostics.py](tests/test_build_diagnostics.py) | Public Docker package failure diagnostics stay bounded and credential/terminal safe. Jason Stys. |
 | [tests/test\_contracts.py](tests/test_contracts.py) | Independent lease/policy boundary and fuzz/property tests; all values fictional. Created by Jason Stys. |
 | [tests/test\_evidence.py](tests/test_evidence.py) | Strict evidence schema, output privacy, real CLI control flow and aggregate negative tests. Jason Stys. |
+| [tests/test\_handoff.py](tests/test_handoff.py) | Real portable broker/coordinator consumer handoff, replay, outage and privacy tests. Jason Stys. |
 | [tests/test\_live\_guards.py](tests/test_live_guards.py) | Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys. |
+| [tests/test\_manager\_build.py](tests/test_manager_build.py) | Independent rejection oracles for maintained manager module/checksum identity. Created by Jason Stys. |
 | [tests/test\_scanner.py](tests/test_scanner.py) | Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys. |
 | [tools.lock.json](tools.lock.json) | Exact official release hashes and immutable PostgreSQL base image. |
 

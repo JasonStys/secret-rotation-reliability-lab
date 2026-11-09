@@ -1,16 +1,18 @@
 """Offline demo and strict aggregate inspection CLI; raw secrets/errors never printed. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# definition: main — line 26
-# variable: parser — line 28
-# variable: commands — line 29
-# variable: demo — line 30
-# variable: report — line 34
-# variable: args — line 38
-# variable: sha — line 41
-# variable: value — line 47
-# variable: value — line 50
-# variable: case — line 51
-# variable: passed — line 51
+# definition: main — line 29
+# variable: parser — line 31
+# variable: commands — line 32
+# variable: demo — line 33
+# variable: report — line 37
+# variable: consumers — line 41
+# variable: args — line 46
+# variable: demonstration — line 49
+# variable: sha — line 56
+# variable: value — line 62
+# variable: value — line 65
+# variable: case — line 66
+# variable: passed — line 66
 # END CODE MAP
 
 from __future__ import annotations
@@ -19,6 +21,7 @@ import argparse
 import subprocess
 from pathlib import Path
 
+from rotation import handoff
 from rotation.evidence import read_report, write_report
 from rotation.simulation import simulate
 
@@ -35,8 +38,20 @@ def main() -> int:
         "report", help="Validate a bounded aggregate, not arbitrary logs or credentials"
     )
     report.add_argument("path", type=Path)
+    consumers = commands.add_parser(
+        "handoff-demo",
+        help="Virtual multi-consumer rotation/outage/drain-ack simulation",
+    )
+    consumers.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
+        if args.command == "handoff-demo":
+            demonstration = handoff.demonstrate()
+            handoff.publish(demonstration, args.output)
+            print(
+                "Multi-consumer simulation: initial,partial,outage,expiry,recovery recorded;no credentials exported — Jason Stys"
+            )
+            return 0
         if args.command == "demo":
             sha = subprocess.check_output(
                 ["git", "rev-parse", "HEAD"],

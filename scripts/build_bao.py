@@ -1,20 +1,57 @@
-"""Build pinned upstream OpenBao with reviewed Go/x-net security fixes, never suppressing advisories. Created by Jason Stys."""
+"""Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 30
-# definition: main — line 33
-# variable: spec — line 39
-# variable: version — line 42
-# variable: tools — line 45
-# variable: directory — line 46
-# variable: environment — line 47
-# variable: key — line 49
-# variable: value — line 49
-# variable: commit — line 77
-# variable: module — line 90
-# variable: binary — line 104
-# variable: info — line 122
-# variable: lab_sha — line 130
-# variable: receipt — line 133
+# variable: ROOT — line 68
+# definition: verify_module — line 71
+# parameter: expected — line 71
+# parameter: module — line 71
+# definition: build_identity — line 81
+# parameter: info — line 81
+# parameter: spec — line 81
+# variable: line — line 83
+# variable: lines — line 83
+# variable: dependencies — line 84
+# variable: line — line 85
+# variable: version — line 87
+# variable: failures — line 92
+# variable: item — line 97
+# variable: name — line 97
+# variable: previous — line 100
+# variable: reviewed_replacements — line 101
+# variable: line — line 102
+# variable: previous — line 104
+# variable: expected — line 106
+# variable: previous — line 111
+# variable: value — line 119
+# variable: name — line 121
+# definition: verify_build_info — line 129
+# parameter: info — line 129
+# parameter: spec — line 129
+# variable: identity — line 131
+# definition: main — line 137
+# variable: spec — line 143
+# variable: version — line 146
+# variable: tools — line 149
+# variable: directory — line 150
+# variable: environment — line 151
+# variable: key — line 153
+# variable: value — line 153
+# variable: commit — line 181
+# variable: patch — line 186
+# variable: data — line 187
+# variable: modules — line 218
+# variable: item — line 223
+# variable: name — line 223
+# variable: item — line 233
+# variable: name — line 233
+# variable: module — line 234
+# variable: binary — line 283
+# variable: info — line 301
+# variable: identity — line 304
+# variable: why — line 306
+# variable: public — line 316
+# variable: line — line 318
+# variable: lab_sha — line 323
+# variable: receipt — line 326
 # END CODE MAP
 
 from __future__ import annotations
@@ -23,11 +60,78 @@ import hashlib
 import json
 import os
 import platform
+import re
 import subprocess
 import uuid
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def verify_module(module: dict, expected: dict) -> None:
+    """Reject changed archive AND go.mod identities, even when version text matches."""
+    if (
+        module.get("Version") != expected["version"]
+        or module.get("Sum") != expected["sum"]
+        or module.get("GoModSum") != expected["go_mod_sum"]
+    ):
+        raise ValueError("reviewed module checksum mismatch")
+
+
+def build_identity(info: str, spec: dict) -> dict:
+    """Expose only reviewed public module identities and failed invariant names; never full build/environment output."""
+    lines = [line.split() for line in info.splitlines()]
+    dependencies = {
+        line[1]: line[2:] for line in lines if len(line) >= 3 and line[0] == "dep"
+    }
+    version = (
+        info.splitlines()[0].rsplit(": ", 1)[-1].split()[0]
+        if info.splitlines() and info.splitlines()[0].split()
+        else "missing"
+    )
+    failures = []
+    if version != spec["go_version"]:
+        failures.append("toolchain")
+    if "github.com/go-jose/go-jose/v3" in dependencies:
+        failures.append("jose_v3_linked")
+    for name, item in spec["modules"].items():
+        if dependencies.get(name) != [item["version"], item["sum"]]:
+            failures.append("module:" + name)
+    previous = None
+    reviewed_replacements = []
+    for line in lines:
+        if line and line[0] == "dep":
+            previous = line[1] if len(line) >= 3 else None
+        elif line and line[0] == "=>":
+            expected = spec["local_replacements"].get(previous)
+            if expected is None or line[1:] != [expected, "(devel)"]:
+                failures.append("unexpected_replacement")
+            else:
+                reviewed_replacements.append(previous)
+            previous = None
+    return {
+        "toolchain": version if re.fullmatch(r"go[0-9.]+", version) else "unrecognized",
+        "reviewed_modules": {
+            name: [
+                value
+                if re.fullmatch(r"[A-Za-z0-9+/:=._-]{1,150}", value)
+                else "unrecognized"
+                for value in dependencies.get(name, [])[:2]
+            ]
+            for name in spec["modules"]
+        },
+        "jose_v3_linked": "github.com/go-jose/go-jose/v3" in dependencies,
+        "reviewed_in_tree_replacements": sorted(reviewed_replacements),
+        "failed_invariants": failures[:20],
+    }
+
+
+def verify_build_info(info: str, spec: dict) -> None:
+    """Require exact linked identities; allow only six exact upstream source-bound in-tree replacements."""
+    identity = build_identity(info, spec)
+    print("COMPILED_IDENTITY " + json.dumps(identity, sort_keys=True), flush=True)
+    if identity["failed_invariants"]:
+        raise ValueError("compiled dependency/toolchain identity mismatch")
 
 
 def main() -> int:
@@ -79,27 +183,102 @@ def main() -> int:
     ).strip()
     if commit != spec["upstream_commit"]:
         raise ValueError("upstream tag/commit mismatch")
-    # Standard Go tooling updates dependency metadata; no generated contribution is submitted upstream.
+    for patch in spec["source_patches"]:
+        data = (ROOT / patch["path"]).read_bytes()
+        if hashlib.sha256(data).hexdigest() != patch["sha256"]:
+            raise ValueError("reviewed upstream patch checksum mismatch")
+        subprocess.run(
+            [
+                "git",
+                "apply",
+                "--check",
+                "--whitespace=error",
+                str(ROOT / patch["path"]),
+            ],
+            cwd=directory,
+            env=environment,
+            check=True,
+            timeout=15,
+        )
+        subprocess.run(
+            ["git", "apply", "--whitespace=error", str(ROOT / patch["path"])],
+            cwd=directory,
+            env=environment,
+            check=True,
+            timeout=15,
+        )
     subprocess.run(
-        ["go", "get", "golang.org/x/net@" + spec["x_net"]],
+        ["gofmt", "-w", "internal/vault/lab_okta_disabled_test.go"],
+        cwd=directory,
+        env=environment,
+        check=True,
+        timeout=15,
+    )
+    # CAP's maintained v0.15 migration removes unpatched jose/v3; do not fork crypto or ignore it.
+    modules = spec["modules"]
+    subprocess.run(
+        [
+            "go",
+            "get",
+            *[name + "@" + item["version"] for name, item in modules.items()],
+        ],
         cwd=directory,
         env=environment,
         check=True,
         timeout=300,
     )
-    module = json.loads(
-        subprocess.check_output(
-            ["go", "mod", "download", "-json", "golang.org/x/net@" + spec["x_net"]],
-            cwd=directory,
-            env=environment,
-            text=True,
-            timeout=60,
-        )
+    subprocess.run(
+        ["go", "mod", "tidy"], cwd=directory, env=environment, check=True, timeout=300
     )
-    if module["Version"] != spec["x_net"] or module["Sum"] != spec["x_net_sum"]:
-        raise ValueError("reviewed module checksum mismatch")
+    for name, item in modules.items():
+        module = json.loads(
+            subprocess.check_output(
+                ["go", "mod", "download", "-json", name + "@" + item["version"]],
+                cwd=directory,
+                env=environment,
+                text=True,
+                timeout=60,
+            )
+        )
+        verify_module(module, item)
     subprocess.run(
         ["go", "mod", "verify"], cwd=directory, env=environment, check=True, timeout=120
+    )
+    # Actual upstream integration tests exercise authentication callers of the migrated CAP API.
+    subprocess.run(
+        [
+            "go",
+            "test",
+            "-p",
+            "2",
+            "-short",
+            "-timeout",
+            "5m",
+            "./internal/builtin/credential/jwt",
+            "./internal/builtin/credential/kubernetes",
+        ],
+        cwd=directory,
+        env=environment,
+        check=True,
+        timeout=660,
+    )
+    subprocess.run(
+        [
+            "go",
+            "test",
+            "-p",
+            "2",
+            "-short",
+            "-timeout",
+            "2m",
+            "-run",
+            "^TestLabOktaMFAUnavailable$",
+            "./internal/vault",
+        ],
+        cwd=directory,
+        env=environment,
+        check=True,
+        timeout=900,
     )
     binary = tools / "bao"
     subprocess.run(
@@ -122,11 +301,25 @@ def main() -> int:
     info = subprocess.check_output(
         ["go", "version", "-m", str(binary)], text=True, timeout=10
     )
-    if (
-        spec["go_version"] not in info
-        or "golang.org/x/net\t" + spec["x_net"] not in info
-    ):
-        raise ValueError("compiled dependency/toolchain identity mismatch")
+    identity = build_identity(info, spec)
+    if identity["jose_v3_linked"]:
+        why = subprocess.run(
+            ["go", "mod", "why", "-m", "github.com/go-jose/go-jose/v3"],
+            cwd=directory,
+            env=environment,
+            text=True,
+            capture_output=True,
+            timeout=60,
+            check=False,
+        )
+        # Go's known public dependency path output only; no environment or arbitrary stderr is logged.
+        public = [
+            line[:200]
+            for line in why.stdout.splitlines()[:40]
+            if re.fullmatch(r"[#A-Za-z0-9/._() -]{1,200}", line)
+        ]
+        print("JOSE_V3_IMPORT_PATH " + "\n".join(public), flush=True)
+    verify_build_info(info, spec)
     lab_sha = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, timeout=10
     ).strip()
@@ -135,8 +328,11 @@ def main() -> int:
         "upstream_sha": commit,
         "tag": spec["tag"],
         "go_version": spec["go_version"],
-        "x_net": module["Version"],
-        "x_net_sum": module["Sum"],
+        "modules": modules,
+        "compiled_identity": identity,
+        "upstream_auth_tests": "PASS jwt+kubernetes -short; vault lab Okta fail-closed",
+        "source_patches": spec["source_patches"],
+        "unsupported_integrations": ["Okta login MFA"],
         "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
         "go_mod_sha256": hashlib.sha256(
             (directory / "go.mod").read_bytes()
