@@ -16,6 +16,7 @@ This is an isolated learning/portfolio project, **not a production secrets servi
 | `Lease` / `Policy` | Printable bounded credentials, strict int/bool rules, finite settings, conservative monotonic deadlines and early refresh. |
 | `Broker.get` | One refresh for concurrent callers, finite capped retry, transient-only valid-cache fallback and strict expiry rejection. TLS/authorization/malformed-provider failures invalidate the cache immediately. |
 | `Broker.invalidate` | A late failure on an old lease cannot erase a newer generation. Consumers must close/drain their old database connections. |
+| [Multi-consumer handoff](docs/consumer-handoff.md) | Exact requested generation/object acknowledgement, per-consumer drain assertions, stale/replay rejection, overlap/outage/expiry work queues and a separate finite virtual-time demo. Broker refresh never implies every consumer switched. |
 | `Transport` / `BaoProvider.issue` | Verified TLS1.2+, numeric loopback-only URLs, no proxies/redirects, bounded JSON, duplicate-key rejection and safe error categories. |
 | Live drill | Real SCRAM/verify-full database connections, exact read-only permissions, overlapping identities, operator renewal, individual/TTL/token revocation, dedicated manager-password rotation, stopped-manager grace/expiry/recovery and HMAC audit verification. |
 | Evidence | Exact allowlisted aggregates and inert HTML; no passwords, tokens, lease IDs, raw logs or arbitrary provider messages can enter a report. |
@@ -71,9 +72,11 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [README.md](README.md) | Secret Rotation Reliability Lab. |
 | [SECURITY.md](SECURITY.md) | Security policy. |
 | [docs/architecture.md](docs/architecture.md) | ADR-001: delegated secrets management with a conservative consumer. |
+| [docs/consumer-handoff.md](docs/consumer-handoff.md) | Multi-consumer generation handoff. |
 | [docs/contracts.md](docs/contracts.md) | Lifecycle, data and privacy contracts. |
 | [docs/reports/benchmark.json](docs/reports/benchmark.json) | Actual warmed broker benchmark with a one-issuance oracle. |
 | [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
+| [docs/reports/handoff-2026-11-09.md](docs/reports/handoff-2026-11-09.md) | Multi-consumer handoff validation — 2026-11-09. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
 | [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
@@ -98,6 +101,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [rotation/broker.py](rotation/broker.py) | Single-flight credential refresh with bounded retry, safe statistics and stale-lease guards. Jason Stys. |
 | [rotation/contracts.py](rotation/contracts.py) | Bounded lease/policy contracts; secret fields never enter representations. Created by Jason Stys. |
 | [rotation/evidence.py](rotation/evidence.py) | Allowlisted aggregate reports, inert escaped HTML and new-directory-only output. Created by Jason Stys. |
+| [rotation/handoff.py](rotation/handoff.py) | Generation-bound multi-consumer acknowledgements; credentials never enter status. Created by Jason Stys. |
 | [rotation/simulation.py](rotation/simulation.py) | Deterministic offline lifecycle demonstration, explicitly NOT live-manager evidence. Created by Jason Stys. |
 | [scripts/\_\_init\_\_.py](scripts/__init__.py) | Opt-in disposable exercise and maintained-repository helpers by Jason Stys; no import-time I/O. |
 | [scripts/bao\_check.py](scripts/bao_check.py) | Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys. |
@@ -115,6 +119,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [tests/test\_broker.py](tests/test_broker.py) | Deterministic retry/expiry/identity/race tests plus actual concurrent single-flight threads. Jason Stys. |
 | [tests/test\_contracts.py](tests/test_contracts.py) | Independent lease/policy boundary and fuzz/property tests; all values fictional. Created by Jason Stys. |
 | [tests/test\_evidence.py](tests/test_evidence.py) | Strict evidence schema, output privacy, real CLI control flow and aggregate negative tests. Jason Stys. |
+| [tests/test\_handoff.py](tests/test_handoff.py) | Real portable broker/coordinator consumer handoff, replay, outage and privacy tests. Jason Stys. |
 | [tests/test\_live\_guards.py](tests/test_live_guards.py) | Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys. |
 | [tests/test\_scanner.py](tests/test_scanner.py) | Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys. |
 | [tools.lock.json](tools.lock.json) | Exact official release hashes and immutable PostgreSQL base image. |
