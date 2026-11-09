@@ -1,39 +1,55 @@
 """Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: ROOT — line 49
-# definition: verify_module — line 52
-# parameter: expected — line 52
-# parameter: module — line 52
-# definition: verify_build_info — line 62
-# parameter: info — line 62
-# parameter: spec — line 62
-# variable: line — line 64
-# variable: lines — line 64
-# variable: dependencies — line 65
-# variable: line — line 66
-# variable: name — line 70
-# variable: item — line 73
-# variable: name — line 73
-# variable: line — line 75
-# definition: main — line 80
-# variable: spec — line 86
-# variable: version — line 89
-# variable: tools — line 92
-# variable: directory — line 93
-# variable: environment — line 94
-# variable: key — line 96
-# variable: value — line 96
-# variable: commit — line 124
-# variable: modules — line 130
-# variable: item — line 135
-# variable: name — line 135
-# variable: item — line 145
-# variable: name — line 145
-# variable: module — line 146
-# variable: binary — line 177
-# variable: info — line 195
-# variable: lab_sha — line 199
-# variable: receipt — line 202
+# variable: ROOT — line 66
+# definition: verify_module — line 69
+# parameter: expected — line 69
+# parameter: module — line 69
+# definition: build_identity — line 79
+# parameter: info — line 79
+# parameter: spec — line 79
+# variable: line — line 81
+# variable: lines — line 81
+# variable: dependencies — line 82
+# variable: line — line 83
+# variable: version — line 85
+# variable: failures — line 90
+# variable: item — line 95
+# variable: name — line 95
+# variable: previous — line 98
+# variable: reviewed_replacements — line 99
+# variable: line — line 100
+# variable: previous — line 102
+# variable: expected — line 104
+# variable: previous — line 109
+# variable: value — line 117
+# variable: name — line 119
+# definition: verify_build_info — line 127
+# parameter: info — line 127
+# parameter: spec — line 127
+# variable: identity — line 129
+# definition: main — line 135
+# variable: spec — line 141
+# variable: version — line 144
+# variable: tools — line 147
+# variable: directory — line 148
+# variable: environment — line 149
+# variable: key — line 151
+# variable: value — line 151
+# variable: commit — line 179
+# variable: modules — line 185
+# variable: item — line 190
+# variable: name — line 190
+# variable: item — line 200
+# variable: name — line 200
+# variable: module — line 201
+# variable: binary — line 232
+# variable: info — line 250
+# variable: identity — line 253
+# variable: why — line 255
+# variable: public — line 265
+# variable: line — line 267
+# variable: lab_sha — line 272
+# variable: receipt — line 275
 # END CODE MAP
 
 from __future__ import annotations
@@ -42,6 +58,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import subprocess
 import uuid
 from pathlib import Path
@@ -59,21 +76,59 @@ def verify_module(module: dict, expected: dict) -> None:
         raise ValueError("reviewed module checksum mismatch")
 
 
-def verify_build_info(info: str, spec: dict) -> None:
-    """Require exact linked module identities and reject any remaining vulnerable jose/v3 dependency."""
+def build_identity(info: str, spec: dict) -> dict:
+    """Expose only reviewed public module identities and failed invariant names; never full build/environment output."""
     lines = [line.split() for line in info.splitlines()]
     dependencies = {
-        line[1]: line[2:] for line in lines if len(line) >= 4 and line[0] == "dep"
+        line[1]: line[2:] for line in lines if len(line) >= 3 and line[0] == "dep"
     }
-    if (
-        spec["go_version"] not in info.splitlines()[0]
-        or any(name == "github.com/go-jose/go-jose/v3" for name in dependencies)
-        or any(
-            dependencies.get(name) != [item["version"], item["sum"]]
-            for name, item in spec["modules"].items()
-        )
-        or any(line and line[0] == "=>" for line in lines)
-    ):
+    version = (
+        info.splitlines()[0].rsplit(": ", 1)[-1].split()[0]
+        if info.splitlines() and info.splitlines()[0].split()
+        else "missing"
+    )
+    failures = []
+    if version != spec["go_version"]:
+        failures.append("toolchain")
+    if "github.com/go-jose/go-jose/v3" in dependencies:
+        failures.append("jose_v3_linked")
+    for name, item in spec["modules"].items():
+        if dependencies.get(name) != [item["version"], item["sum"]]:
+            failures.append("module:" + name)
+    previous = None
+    reviewed_replacements = []
+    for line in lines:
+        if line and line[0] == "dep":
+            previous = line[1] if len(line) >= 3 else None
+        elif line and line[0] == "=>":
+            expected = spec["local_replacements"].get(previous)
+            if expected is None or line[1:] != [expected, "(devel)"]:
+                failures.append("unexpected_replacement")
+            else:
+                reviewed_replacements.append(previous)
+            previous = None
+    return {
+        "toolchain": version if re.fullmatch(r"go[0-9.]+", version) else "unrecognized",
+        "reviewed_modules": {
+            name: [
+                value
+                if re.fullmatch(r"[A-Za-z0-9+/:=._-]{1,150}", value)
+                else "unrecognized"
+                for value in dependencies.get(name, [])[:2]
+            ]
+            for name in spec["modules"]
+        },
+        "jose_v3_linked": "github.com/go-jose/go-jose/v3" in dependencies,
+        "reviewed_in_tree_replacements": sorted(reviewed_replacements),
+        "failed_invariants": failures[:20],
+    }
+
+
+def verify_build_info(info: str, spec: dict) -> None:
+    """Require exact linked identities; allow only six exact upstream source-bound in-tree replacements."""
+    identity = build_identity(info, spec)
+    print("COMPILED_IDENTITY " + json.dumps(identity, sort_keys=True), flush=True)
+    if identity["failed_invariants"]:
         raise ValueError("compiled dependency/toolchain identity mismatch")
 
 
@@ -195,6 +250,24 @@ def main() -> int:
     info = subprocess.check_output(
         ["go", "version", "-m", str(binary)], text=True, timeout=10
     )
+    identity = build_identity(info, spec)
+    if identity["jose_v3_linked"]:
+        why = subprocess.run(
+            ["go", "mod", "why", "-m", "github.com/go-jose/go-jose/v3"],
+            cwd=directory,
+            env=environment,
+            text=True,
+            capture_output=True,
+            timeout=60,
+            check=False,
+        )
+        # Go's known public dependency path output only; no environment or arbitrary stderr is logged.
+        public = [
+            line[:200]
+            for line in why.stdout.splitlines()[:40]
+            if re.fullmatch(r"[#A-Za-z0-9/._() -]{1,200}", line)
+        ]
+        print("JOSE_V3_IMPORT_PATH " + "\n".join(public), flush=True)
     verify_build_info(info, spec)
     lab_sha = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, timeout=10
@@ -205,6 +278,7 @@ def main() -> int:
         "tag": spec["tag"],
         "go_version": spec["go_version"],
         "modules": modules,
+        "compiled_identity": identity,
         "upstream_auth_tests": "PASS jwt+kubernetes -short",
         "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
         "go_mod_sha256": hashlib.sha256(

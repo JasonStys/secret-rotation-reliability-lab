@@ -22,6 +22,14 @@
         "sum": "h1:18ELalfM5+XNRwzM2nYqXsZQ9ByS1uhj2O/U7+5jqRY=",
         "go_mod_sum": "h1:WgDCOTH8iwtB66T4/GfI94AHo/hhdb7Hah9NDseQfiI="
       }
+    },
+    "local_replacements": {
+      "github.com/openbao/openbao/api/v2": "./api",
+      "github.com/openbao/openbao/api/auth/approle/v2": "./api/auth/approle",
+      "github.com/openbao/openbao/api/auth/kubernetes/v2": "./api/auth/kubernetes",
+      "github.com/openbao/openbao/api/auth/userpass/v2": "./api/auth/userpass",
+      "github.com/openbao/openbao/sdk/v2": "./sdk",
+      "github.com/boltdb/bolt": "./internal/helper/stubbolt"
     }
   },
   "original_openbao_release": {

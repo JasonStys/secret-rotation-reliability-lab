@@ -1,17 +1,26 @@
 """Independent rejection oracles for maintained manager module/checksum identity. Created by Jason Stys."""
 # BEGIN CODE MAP (generated; python scripts/code_map.py)
-# variable: SPEC — line 25
-# definition: build_info — line 30
-# variable: item — line 38
-# variable: name — line 38
-# definition: test_exact_compiled_graph_and_no_v3 — line 43
-# variable: info — line 45
-# variable: changed — line 47
-# definition: test_both_module_archive_and_metadata_checksum_required — line 58
-# variable: expected — line 60
-# variable: actual — line 61
-# variable: field — line 67
-# variable: changed — line 68
+# variable: SPEC — line 34
+# definition: build_info — line 39
+# variable: item — line 47
+# variable: name — line 47
+# definition: test_exact_compiled_graph_and_no_v3 — line 52
+# variable: info — line 54
+# variable: changed — line 56
+# definition: test_both_module_archive_and_metadata_checksum_required — line 67
+# variable: expected — line 69
+# variable: actual — line 70
+# variable: field — line 76
+# variable: changed — line 77
+# definition: test_only_exact_upstream_in_tree_replacements — line 83
+# parameter: capsys — line 83
+# variable: info — line 85
+# variable: name — line 86
+# variable: path — line 86
+# variable: info — line 87
+# variable: content — line 90
+# definition: test_safe_diagnostics_and_empty_metadata — line 99
+# variable: result — line 104
 # END CODE MAP
 
 import copy
@@ -69,3 +78,31 @@ def test_both_module_archive_and_metadata_checksum_required():
         changed[field] += "changed"
         with pytest.raises(ValueError, match="checksum mismatch"):
             verify_module(changed, expected)
+
+
+def test_only_exact_upstream_in_tree_replacements(capsys):
+    """Vendor-owned local modules are source-SHA-bound; changed paths or crypto forks remain rejected."""
+    info = build_info()
+    for name, path in SPEC["local_replacements"].items():
+        info += "\tdep\t" + name + "\tv0.0.0\n\t=>\t" + path + "\t(devel)\n\n"
+    verify_build_info(info, SPEC)
+    assert "reviewed_in_tree_replacements" in capsys.readouterr().out
+    for content in (
+        info.replace("./sdk", "../outside"),
+        info.replace("./api\t", "./api-changed\t"),
+        info + "\tdep\tgithub.com/hashicorp/cap\tv0.15.0\n\t=>\t./sdk\t(devel)\n",
+    ):
+        with pytest.raises(ValueError):
+            verify_build_info(content, SPEC)
+
+
+def test_safe_diagnostics_and_empty_metadata():
+    """Only fixed public fields are logged; missing/malformed toolchain and replacement identities fail closed."""
+    from scripts.build_bao import build_identity
+
+    assert build_identity("", SPEC)["failed_invariants"]
+    result = build_identity(
+        build_info().replace("go1.27.3", "private-token-with-controls\x00"), SPEC
+    )
+    assert result["toolchain"] == "unrecognized"
+    assert "private-token" not in json.dumps(result)
