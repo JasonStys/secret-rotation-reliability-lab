@@ -1,0 +1,7 @@
+# Maintained dependency repair validation — November 9, 2026
+
+Created by Jason Stys. The hosted PR's actual binary gate found vulnerable jose/v3, jose/v4 and x/net dependencies; the gate worked as intended. The repair uses official OpenBao2.7.2 plus the maintained CAP0.15 migration, exact jose/v4.1.8 and x/net0.62.0 with both published Go checksums. Linked v3/replacements are explicitly rejected. Targeted genuine upstream authentication tests precede the build and unchanged scan/lifecycle gates. Alpine image pins/diagnostics are repaired using the official index, without any exclusion.
+
+Local Windows validation: 117 tests passed, 97.95% branch/statement coverage (existing95% floor); Ruff format/lint and strict mypy passed. New independent fixtures reject altered module/archive/metadata identities, old toolchains/versions, missing sums, v3/replacements, and unsafe/unbounded build diagnostics. Generated exact line maps, exhaustive README file guide and repository contracts pass. These fixtures validate guards and do not substitute for real native compilation, security inventory or TLS/database lifecycle behavior.
+
+The Linux Go build, upstream short authentication tests, actual Trivy binary/image inventory and real OpenBao/PostgreSQL lifecycle remain required in hosted CI and are not reported as passed locally. Docker was left unchanged. Existing point-in-time CI reports remain historical. No Actions storage was created by these local checks; the root review/publish process checks storage before hosted validation.

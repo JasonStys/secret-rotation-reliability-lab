@@ -80,6 +80,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
 | [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
+| [docs/reports/security-repair-2026-11-09.md](docs/reports/security-repair-2026-11-09.md) | Maintained dependency repair validation — November 9, 2026. |
 | [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
 | [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
 | [docs/reports/validation.md](docs/reports/validation.md) | Measured validation and author review. |
@@ -106,7 +107,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [scripts/\_\_init\_\_.py](scripts/__init__.py) | Opt-in disposable exercise and maintained-repository helpers by Jason Stys; no import-time I/O. |
 | [scripts/bao\_check.py](scripts/bao_check.py) | Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys. |
 | [scripts/benchmark.py](scripts/benchmark.py) | Measure warmed cached broker decisions with an independent one-issuance oracle. Created by Jason Stys. |
-| [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed Go/x-net security fixes, never suppressing advisories. Created by Jason Stys. |
+| [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys. |
 | [scripts/code\_map.py](scripts/code_map.py) | Generate/check exact Python, SQL, shell and YAML symbol positions. Created by Jason Stys. |
 | [scripts/file\_guide.py](scripts/file_guide.py) | Maintain a complete tracked-file README purpose inventory; unknown file types fail closed. Created by Jason Stys. |
 | [scripts/image\_check.py](scripts/image_check.py) | Build/scan a non-root-only image from the immutable official PostgreSQL base; do not suppress vulnerabilities. Jason Stys. |
@@ -117,10 +118,12 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [sql/seed.sql](sql/seed.sql) | Jason Stys: fictional product inventory and dedicated non-superuser credential manager privileges. |
 | [tests/test\_bao.py](tests/test_bao.py) | Provider protocol and transport adversarial tests; fake sockets never access outside networks. Jason Stys. |
 | [tests/test\_broker.py](tests/test_broker.py) | Deterministic retry/expiry/identity/race tests plus actual concurrent single-flight threads. Jason Stys. |
+| [tests/test\_build\_diagnostics.py](tests/test_build_diagnostics.py) | Public Docker package failure diagnostics stay bounded and credential/terminal safe. Jason Stys. |
 | [tests/test\_contracts.py](tests/test_contracts.py) | Independent lease/policy boundary and fuzz/property tests; all values fictional. Created by Jason Stys. |
 | [tests/test\_evidence.py](tests/test_evidence.py) | Strict evidence schema, output privacy, real CLI control flow and aggregate negative tests. Jason Stys. |
 | [tests/test\_handoff.py](tests/test_handoff.py) | Real portable broker/coordinator consumer handoff, replay, outage and privacy tests. Jason Stys. |
 | [tests/test\_live\_guards.py](tests/test_live_guards.py) | Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys. |
+| [tests/test\_manager\_build.py](tests/test_manager_build.py) | Independent rejection oracles for maintained manager module/checksum identity. Created by Jason Stys. |
 | [tests/test\_scanner.py](tests/test_scanner.py) | Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys. |
 | [tools.lock.json](tools.lock.json) | Exact official release hashes and immutable PostgreSQL base image. |
 
