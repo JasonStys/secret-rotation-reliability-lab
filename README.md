@@ -76,12 +76,16 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/architecture.md](docs/architecture.md) | ADR-001: delegated secrets management with a conservative consumer. |
 | [docs/consumer-handoff.md](docs/consumer-handoff.md) | Multi-consumer generation handoff. |
 | [docs/contracts.md](docs/contracts.md) | Lifecycle, data and privacy contracts. |
+| [docs/handbook.md](docs/handbook.md) | Secret Rotation Reliability Lab handbook. |
 | [docs/reports/benchmark.json](docs/reports/benchmark.json) | Actual warmed broker benchmark with a one-issuance oracle. |
 | [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
+| [docs/reports/documentation-refresh-2026-11-09.md](docs/reports/documentation-refresh-2026-11-09.md) | Documentation refresh — 2026-11-09. |
 | [docs/reports/handoff-2026-11-09.md](docs/reports/handoff-2026-11-09.md) | Multi-consumer handoff validation — 2026-11-09. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
 | [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
+| [docs/reports/project-guide.docx](docs/reports/project-guide.docx) | Reviewed Word project guide bound to the documented source revision. |
+| [docs/reports/publications.json](docs/reports/publications.json) | Exact Office digests, visual review scopes and immutable source baselines. |
 | [docs/reports/security-repair-2026-11-09.md](docs/reports/security-repair-2026-11-09.md) | Maintained dependency repair validation — November 9, 2026. |
 | [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
 | [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
@@ -135,3 +139,9 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 ## Maintenance and contribution
 
 Run the full [validation commands](docs/testing.md), review actual security findings without suppressions, and rerun the real drill after lifecycle changes. Never paste tokens in issue bodies, publish ignored `out/` data or run this against a shared/production Docker host. Check account Actions storage before workflow work; cleanup needs fresh user approval and verified private backups. For bugs/security reporting and help, see [SECURITY](SECURITY.md), [CONTRIBUTING](CONTRIBUTING.md) and the runbook. Authored source is MIT; OpenBao and PostgreSQL retain their upstream licenses and trademarks.
+
+## Documentation editions
+
+Start with the [organized handbook](docs/handbook.md) for current usage, design, security and test guidance. Reviewed downloadable editions: [project-guide.docx](docs/reports/project-guide.docx).
+
+[Publication identities and source scope](docs/reports/publications.json) · [Documentation validation record](docs/reports/documentation-refresh-2026-11-09.md). Historical results retain their own tested revision and date.

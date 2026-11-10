@@ -4,22 +4,22 @@
 # variable: BEGIN — line 33
 # variable: END — line 33
 # variable: SPECIAL — line 34
-# definition: purpose — line 55
-# parameter: path — line 55
-# variable: source — line 59
-# variable: line — line 67
-# definition: main — line 73
-# variable: parser — line 75
-# variable: args — line 77
-# variable: files — line 78
-# variable: rows — line 86
-# variable: path — line 87
-# variable: label — line 88
-# variable: readme — line 90
-# variable: original — line 91
-# variable: end — line 92
-# variable: start — line 92
-# variable: expected — line 93
+# definition: purpose — line 57
+# parameter: path — line 57
+# variable: source — line 61
+# variable: line — line 69
+# definition: main — line 75
+# variable: parser — line 77
+# variable: args — line 79
+# variable: files — line 80
+# variable: rows — line 88
+# variable: path — line 89
+# variable: label — line 90
+# variable: readme — line 92
+# variable: original — line 93
+# variable: end — line 94
+# variable: start — line 94
+# variable: expected — line 95
 # END CODE MAP
 
 from __future__ import annotations
@@ -32,6 +32,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BEGIN, END = "<!-- BEGIN FILE GUIDE -->", "<!-- END FILE GUIDE -->"
 SPECIAL = {
+    "docs/reports/project-guide.docx": "Reviewed Word project guide bound to the documented source revision.",
+    "docs/reports/publications.json": "Exact Office digests, visual review scopes and immutable source baselines.",
     "patches/disable-unused-okta-mfa.patch": "Reviewed hash-bound upstream lab patch: unsupported Okta login MFA always rejects, removing obsolete SDK linkage; actual Go regression included.",
     ".gitignore": "Keep generated keys, credentials, logs, tools and working data untracked.",
     ".gitattributes": "Consistent LF source checkout across operating systems.",
