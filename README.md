@@ -89,6 +89,7 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/reports/documentation-refresh-2026-11-09.md](docs/reports/documentation-refresh-2026-11-09.md) | Documentation refresh — 2026-11-09. |
 | [docs/reports/handoff-2026-11-09.md](docs/reports/handoff-2026-11-09.md) | Multi-consumer handoff validation — 2026-11-09. |
 | [docs/reports/image-library-security-2026-11-11.md](docs/reports/image-library-security-2026-11-11.md) | Actual derived-image library security repair — 2026-11-11. |
+| [docs/reports/installed-windows-1.1.0-r2-2026-11-11.md](docs/reports/installed-windows-1.1.0-r2-2026-11-11.md) | Observed installed workflows, delivery evidence, data preservation and practical limits. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
 | [docs/reports/native-workbench-2026-11-11.md](docs/reports/native-workbench-2026-11-11.md) | Native offline workbench validation — 2026-11-11. |
@@ -99,6 +100,8 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/reports/simulation.html](docs/reports/simulation.html) | Inert HTML rendering of the clearly labeled offline simulation. |
 | [docs/reports/simulation.json](docs/reports/simulation.json) | Explicitly simulated offline assertions and virtual elapsed times. |
 | [docs/reports/validation.md](docs/reports/validation.md) | Measured validation and author review. |
+| [docs/reports/windows-application-guide-1.1.0-r2.docx](docs/reports/windows-application-guide-1.1.0-r2.docx) | Current peer-reviewed installed app guide with actual screenshots and immutable code. |
+| [docs/reports/windows-application-guide-1.1.0-r2.json](docs/reports/windows-application-guide-1.1.0-r2.json) | Exact guide, source, image and individually reviewed page identities. |
 | [docs/research.md](docs/research.md) | Primary-source research and implementation choices. |
 | [docs/runbook.md](docs/runbook.md) | Runbook: safe local demonstration and owned live exercise. |
 | [docs/testing.md](docs/testing.md) | Test strategy and reproducible validation. |
@@ -173,3 +176,8 @@ Run the full [validation commands](docs/testing.md), review actual security find
 Start with the [organized handbook](docs/handbook.md) for current usage, design, security and test guidance. Reviewed downloadable editions: [project-guide.docx](docs/reports/project-guide.docx).
 
 [Publication identities and source scope](docs/reports/publications.json) · [Documentation validation record](docs/reports/documentation-refresh-2026-11-09.md). Historical results retain their own tested revision and date.
+
+
+## Current installed application guide
+
+The published **1.1.0** application has a [four-page guide](docs/reports/windows-application-guide-1.1.0-r2.docx) with actual installed screenshots, a practical journey, immutable source excerpts and operating limits. The [installed validation report](docs/reports/installed-windows-1.1.0-r2-2026-11-11.md) explains the results and [review manifest](docs/reports/windows-application-guide-1.1.0-r2.json) records exact source, image and page identities. Historical documentation remains available.
