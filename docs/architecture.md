@@ -27,3 +27,7 @@ Cached decisions and counter updates are O(1) time/space; cold refresh makes at 
 ## Verification
 
 Native unit, Hypothesis, mocked transport and actual thread tests prove library boundaries. A separate real 15-case drill checks authorization/data behavior with positive controls, server-side role queries and HMAC audit entries. Docker helpers are not in the core coverage denominator and need real hosted integration. See [testing](testing.md) and [research sources](research.md). This decision does not assert a government certification, production approval or independent audit.
+
+## Native offline review layer
+
+A real main-thread Tk workbench delegates one retained analysis worker to a project adapter calling the original domain engines. Bounded selected-input reads and original schema/policy checks precede an immutable aggregate bundle commit. Views/search never alter original counts. An owner-local SQLite profile is outside install/source; all fixed mutable entries are admitted before initialization. Exit retains the same worker/profile lock until completion. Exact source/dirty/runtime/public-resource metadata is checked before private state. [Domain controls and deliberate boundary](native-application.md).

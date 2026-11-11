@@ -13,3 +13,7 @@ __pycache__/
 *.env
 *.token
 *.password
+
+# Generated portable builds; owner profiles stay outside the installation.
+release/
+*.spec
