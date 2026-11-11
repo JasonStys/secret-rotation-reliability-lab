@@ -11,6 +11,12 @@ This is an isolated learning/portfolio project, **not a production secrets servi
 
 The reviewed CI manager is a **lab-maintained OpenBao rebuild** with an explicitly unsupported Okta login-MFA integration. That unused integration always returns an error; it cannot silently bypass MFA or authenticate. A hash-bound source patch removes the obsolete Okta SDK's vulnerable jose/v3 linkage, with an actual upstream-package fail-closed test before the unchanged binary scan and database lifecycle drill. Other authentication and PostgreSQL secret-engine paths retain their genuine upstream implementation. See [build scope and security correction](docs/upstream-security.md); this is not an upstream-signed full-feature release.
 
+## Native offline workbench
+
+**Secret Rotation Rehearsal Workbench 1.1.0** adds real native authorized-file/configuration controls, original-engine outcomes, complete evidence, literal search/filter, exact export and durable history. Prepared cases are inputs inside the same full app. [Usage, schemas, profile/privacy and complete compiled test](docs/native-application.md) · [Dated candidate evidence](docs/reports/native-workbench-2026-11-11.md).
+
+Replay authorized closed secret-free event scripts through the actual Broker, Policy, Lease and Coordinator. Inspect requested versus current generations, expiry windows, rejected stale/undrained acknowledgements, outage grace/expiry, recovery and wrong expected outcomes. The provider is explicitly fictional; no real credential or service is requested. The portable Windows recipe bundles the patched runtime; actual publication and PC installation are separate review steps, not inferred from a source badge.
+
 ## Features and major functions
 
 | Component | What it demonstrates |
@@ -77,12 +83,15 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [docs/consumer-handoff.md](docs/consumer-handoff.md) | Multi-consumer generation handoff. |
 | [docs/contracts.md](docs/contracts.md) | Lifecycle, data and privacy contracts. |
 | [docs/handbook.md](docs/handbook.md) | Secret Rotation Reliability Lab handbook. |
+| [docs/native-application.md](docs/native-application.md) | Secret Rotation Rehearsal Workbench: native application. |
 | [docs/reports/benchmark.json](docs/reports/benchmark.json) | Actual warmed broker benchmark with a one-issuance oracle. |
 | [docs/reports/ci.json](docs/reports/ci.json) | Immutable executable-source acceptance snapshot with actual completed checks. |
 | [docs/reports/documentation-refresh-2026-11-09.md](docs/reports/documentation-refresh-2026-11-09.md) | Documentation refresh — 2026-11-09. |
 | [docs/reports/handoff-2026-11-09.md](docs/reports/handoff-2026-11-09.md) | Multi-consumer handoff validation — 2026-11-09. |
+| [docs/reports/image-library-security-2026-11-11.md](docs/reports/image-library-security-2026-11-11.md) | Actual derived-image library security repair — 2026-11-11. |
 | [docs/reports/live.html](docs/reports/live.html) | Inert HTML rendering of the selected actual service aggregate. |
 | [docs/reports/live.json](docs/reports/live.json) | Selected actual service case durations and safe lifecycle counters. |
+| [docs/reports/native-workbench-2026-11-11.md](docs/reports/native-workbench-2026-11-11.md) | Native offline workbench validation — 2026-11-11. |
 | [docs/reports/portfolio-sync-2026-10-22.md](docs/reports/portfolio-sync-2026-10-22.md) | <!-- File: docs/reports/portfolio-sync-2026-10-22.md; Purpose: certificate-bundle security repair and evidence by Jason Stys. -->. |
 | [docs/reports/project-guide.docx](docs/reports/project-guide.docx) | Reviewed Word project guide bound to the documented source revision. |
 | [docs/reports/publications.json](docs/reports/publications.json) | Exact Office digests, visual review scopes and immutable source baselines. |
@@ -103,23 +112,35 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [requirements-dev.lock](requirements-dev.lock) | Complete hash-locked portable development graph. |
 | [requirements-integration.in](requirements-integration.in) | Exact live-only PostgreSQL driver input. |
 | [requirements-integration.lock](requirements-integration.lock) | Hash-locked CPython3.14/Linux-x86_64 live-only driver graph. |
+| [requirements-native.lock](requirements-native.lock) | Exact complete hash-locked native freezing tool graph; no runtime setup dependency. |
 | [rotation/\_\_init\_\_.py](rotation/__init__.py) | Credential lifecycle contracts and safe evidence by Jason Stys; no import-time I/O. |
 | [rotation/\_\_main\_\_.py](rotation/__main__.py) | Offline demo and strict aggregate inspection CLI; raw secrets/errors never printed. Created by Jason Stys. |
 | [rotation/bao.py](rotation/bao.py) | Verified TLS, no redirects/proxies, bounded OpenBao JSON and safe provider errors. Created by Jason Stys. |
 | [rotation/broker.py](rotation/broker.py) | Single-flight credential refresh with bounded retry, safe statistics and stale-lease guards. Jason Stys. |
 | [rotation/contracts.py](rotation/contracts.py) | Bounded lease/policy contracts; secret fields never enter representations. Created by Jason Stys. |
+| [rotation/desktop.py](rotation/desktop.py) | Native offline workbench: real project inputs, analysis, searchable evidence, history and export. Jason Stys. |
+| [rotation/desktop\_io.py](rotation/desktop_io.py) | Bounded regular descriptor reads and strict finite JSON for owner-local desktop state. Jason Stys. |
+| [rotation/desktop\_project.py](rotation/desktop_project.py) | Replay closed secret-free handoff scripts through the real Broker/Coordinator with virtual time. Jason Stys. |
+| [rotation/desktop\_state.py](rotation/desktop_state.py) | Owner-local desktop profile, bounded durable bundles and non-overwriting export. Jason Stys. |
 | [rotation/evidence.py](rotation/evidence.py) | Allowlisted aggregate reports, inert escaped HTML and new-directory-only output. Created by Jason Stys. |
 | [rotation/handoff.py](rotation/handoff.py) | Generation-bound multi-consumer acknowledgements; credentials never enter status. Created by Jason Stys. |
+| [rotation/inputs.py](rotation/inputs.py) | Bounded stable ordinary-file reads and streaming tool hashes for offline identity inputs. Jason Stys. |
 | [rotation/simulation.py](rotation/simulation.py) | Deterministic offline lifecycle demonstration, explicitly NOT live-manager evidence. Created by Jason Stys. |
 | [scripts/\_\_init\_\_.py](scripts/__init__.py) | Opt-in disposable exercise and maintained-repository helpers by Jason Stys; no import-time I/O. |
 | [scripts/bao\_check.py](scripts/bao_check.py) | Scan the actual verified OpenBao binary's Go module inventory with no advisory exclusions. Created by Jason Stys. |
 | [scripts/benchmark.py](scripts/benchmark.py) | Measure warmed cached broker decisions with an independent one-issuance oracle. Created by Jason Stys. |
 | [scripts/build\_bao.py](scripts/build_bao.py) | Build pinned upstream OpenBao with reviewed maintained authentication/network dependencies, never suppressing advisories. Created by Jason Stys. |
+| [scripts/build\_native.py](scripts/build_native.py) | Build the complete real offline workbench as one Windows portable executable. Jason Stys. |
+| [scripts/check\_tk\_runtime.py](scripts/check_tk_runtime.py) | Require the selected interpreter's actual native Tk imports and loaded Tcl, without a display. Jason Stys. |
 | [scripts/code\_map.py](scripts/code_map.py) | Generate/check exact Python, SQL, shell and YAML symbol positions. Created by Jason Stys. |
 | [scripts/file\_guide.py](scripts/file_guide.py) | Maintain a complete tracked-file README purpose inventory; unknown file types fail closed. Created by Jason Stys. |
 | [scripts/image\_check.py](scripts/image_check.py) | Build/scan a non-root-only image from the immutable official PostgreSQL base; do not suppress vulnerabilities. Jason Stys. |
 | [scripts/live\_drill.py](scripts/live_drill.py) | Real TLS OpenBao/PostgreSQL lifecycle on an acknowledged disposable Linux Docker host. Created by Jason Stys. |
+| [scripts/native\_acceptance.py](scripts/native_acceptance.py) | Actual final portable widgets/core/native-window acceptance with independent oracles. Jason Stys. |
+| [scripts/native\_common.py](scripts/native_common.py) | Actual patched Python/Tcl/Tk/PyInstaller runtime notices and authored portable icon. Jason Stys. |
+| [scripts/native\_entry.py](scripts/native_entry.py) | Launch the actual bundled offline project workbench; no setup shell commands. Jason Stys. |
 | [scripts/scanners.py](scripts/scanners.py) | Install only hash-pinned official Linux scanner binaries. Created by Jason Stys. |
+| [scripts/test\_native\_app.py](scripts/test_native_app.py) | Run the real frozen workbench twice with an owned synthetic profile and exact bundle persistence. Jason Stys. |
 | [scripts/validate.sh](scripts/validate.sh) | Jason Stys: strict portable tests and maintained source/documentation contracts; no Actions storage uploads. |
 | [scripts/validate\_repo.py](scripts/validate_repo.py) | Gate immutable pins, workflow permission/storage and credential tracking invariants. Created by Jason Stys. |
 | [sql/seed.sql](sql/seed.sql) | Jason Stys: fictional product inventory and dedicated non-superuser credential manager privileges. |
@@ -127,11 +148,18 @@ Headers map definitions, parameters and assigned variables/attributes to exact l
 | [tests/test\_broker.py](tests/test_broker.py) | Deterministic retry/expiry/identity/race tests plus actual concurrent single-flight threads. Jason Stys. |
 | [tests/test\_build\_diagnostics.py](tests/test_build_diagnostics.py) | Public Docker package failure diagnostics stay bounded and credential/terminal safe. Jason Stys. |
 | [tests/test\_contracts.py](tests/test_contracts.py) | Independent lease/policy boundary and fuzz/property tests; all values fictional. Created by Jason Stys. |
+| [tests/test\_desktop\_gui.py](tests/test_desktop_gui.py) | Presentation-adapter unit tests with real core/SQLite workers; real widgets are separately frozen-tested. Jason Stys. |
+| [tests/test\_desktop\_io.py](tests/test_desktop_io.py) | Private state JSON and bounded descriptor-read boundary cases with actual file bytes. Jason Stys. |
+| [tests/test\_desktop\_project.py](tests/test_desktop_project.py) | Independent original-core handoff outcomes, secret-free schema and explicit policy-change regressions. Jason Stys. |
+| [tests/test\_desktop\_state.py](tests/test_desktop_state.py) | Independent offline desktop ownership, byte-bound, SQLite and non-overwrite regressions. Jason Stys. |
 | [tests/test\_evidence.py](tests/test_evidence.py) | Strict evidence schema, output privacy, real CLI control flow and aggregate negative tests. Jason Stys. |
 | [tests/test\_handoff.py](tests/test_handoff.py) | Real portable broker/coordinator consumer handoff, replay, outage and privacy tests. Jason Stys. |
 | [tests/test\_live\_guards.py](tests/test_live_guards.py) | Cross-platform destructive-stage ownership, acknowledgment, deadline and TLS-copy contracts. Jason Stys. |
 | [tests/test\_manager\_build.py](tests/test_manager_build.py) | Independent rejection oracles for maintained manager module/checksum identity. Created by Jason Stys. |
+| [tests/test\_native\_inputs.py](tests/test_native_inputs.py) | Actual same-descriptor input bounds and ownership-change cases for selected offline reports. Jason Stys. |
+| [tests/test\_profile\_admission.py](tests/test_profile_admission.py) | Actual pre-existing alias refusal and ordinary SQLite recovery continuity. Jason Stys. |
 | [tests/test\_scanner.py](tests/test_scanner.py) | Scanner regression: actual post-build rootfs mode and nonempty Go inventory required. Created by Jason Stys. |
+| [tests/test\_tk\_runtime.py](tests/test_tk_runtime.py) | Actual isolated native Tcl positive plus fail-closed loader/interpreter/version controls. Jason Stys. |
 | [tools.lock.json](tools.lock.json) | Exact official release hashes and immutable PostgreSQL base image. |
 
 <!-- END FILE GUIDE -->

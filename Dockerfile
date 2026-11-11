@@ -8,6 +8,8 @@ USER root
 RUN apk add --no-cache --upgrade \
       brotli-libs=1.2.1-r0 \
       libcurl=8.23.0-r0 \
+    krb5-libs=1.22.3-r0 \
+    libxslt=1.1.43-r4 \
       musl=1.2.6-r3 \
       musl-utils=1.2.6-r3 \
       zlib=1.4-r0 \
