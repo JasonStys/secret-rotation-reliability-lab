@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "repository": "secret-rotation-reliability-lab",
+  "runtimeVersion": "1.1.0",
+  "runtimeSource": "1d2ea4edd286aac5418a913bf45082998b17d503",
+  "createdAt": "2026-11-11T18:18:52.540Z",
+  "author": "Jason Stys",
+  "document": "windows-application-guide-1.1.0-r2.docx",
+  "sha256": "654b3340d2b7b108b006156b19f45ae41ebb8f1584937ab43be190dd0134ffbd",
+  "screenshots": [
+    {
+      "file": "selected-evidence.png",
+      "sha256": "c8ab34d27f9e70c45c666aaf1d42956429ff68eb0b0963f8a9bb7573bce7f1e8",
+      "width": 1276,
+      "height": 899,
+      "caption": "All eleven displayed events match their expected outcomes, yet two consumers still need handoff. Matching event expectations does not mean every consumer switched."
+    },
+    {
+      "file": "owner-unknown-review.png",
+      "sha256": "408beb71645b1bcb27a6055ea2a015c5b5d2c53e7c13b1d0c5f85771ee20c3fb",
+      "width": 1276,
+      "height": 899,
+      "caption": "Two consumers still acknowledge generation 1 while generation 2 is current. This prepared mismatch case also retains thirteen of fourteen matching outcomes; it does not relabel the wrong expectation as a pass."
+    }
+  ],
+  "snippets": [
+    {
+      "file": "rotation/desktop_project.py",
+      "first": 478,
+      "last": 492,
+      "sha256": "701225b1fa18704b4c4f4ef95a6d6fafb85ae6b46401dc5583e2001cf207f31d",
+      "url": "https://github.com/JasonStys/secret-rotation-reliability-lab/blob/1d2ea4edd286aac5418a913bf45082998b17d503/rotation/desktop_project.py#L478"
+    }
+  ],
+  "observedTests": [
+    {
+      "name": "Independent distribution",
+      "observed": "All five downloaded release files matched provider hashes. The executable also matched its checksum sidecar. Installed resources remained byte-identical after actual use.",
+      "result": "Passed"
+    },
+    {
+      "name": "Actual use and restart",
+      "observed": "All 12 installed workflows and 12 exact evidence bundles passed the original full assertions. Both launches exited normally; reopening retained every saved bundle.",
+      "result": "Passed"
+    },
+    {
+      "name": "Source and security",
+      "observed": "All exact-source main workflows passed before publication. Configured processed CodeQL analysis had zero raw findings and zero open main alerts.",
+      "result": "Passed"
+    },
+    {
+      "name": "Individual shortcut",
+      "observed": "Desktop and Start-menu targets were read back. Full installed executable acceptance is distinct from activating a normal default-profile shortcut.",
+      "result": "Verified"
+    }
+  ],
+  "visualReview": "all four pages individually approved",
+  "reviewer": "root",
+  "reviewedPageHashes": {
+    "page-1.png": "4a771e32c1811734b950f8097ce44e144ea9284bcc777bf203d712b83a30ea8e",
+    "page-2.png": "082bfbdb373fccf97b82b4b08ca12287aa3e53ed26b13500d4c4df9e2ad0beee",
+    "page-3.png": "49c5c50828738653f690ec81a88c07714df45e30b14384c867d79017075d4fc8",
+    "page-4.png": "dbd150d355dd2984675ad36e13aac4a64ffeecea579bbd381331bdd2455a23ab"
+  },
+  "privateTestInputsOnly": true
+}

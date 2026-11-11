@@ -4,22 +4,22 @@
 # variable: BEGIN — line 33
 # variable: END — line 33
 # variable: SPECIAL — line 34
-# definition: purpose — line 58
-# parameter: path — line 58
-# variable: source — line 62
-# variable: line — line 70
-# definition: main — line 76
-# variable: parser — line 78
-# variable: args — line 80
-# variable: files — line 81
-# variable: rows — line 89
-# variable: path — line 90
-# variable: label — line 91
-# variable: readme — line 93
-# variable: original — line 94
-# variable: end — line 95
-# variable: start — line 95
-# variable: expected — line 96
+# definition: purpose — line 61
+# parameter: path — line 61
+# variable: source — line 65
+# variable: line — line 73
+# definition: main — line 79
+# variable: parser — line 81
+# variable: args — line 83
+# variable: files — line 84
+# variable: rows — line 92
+# variable: path — line 93
+# variable: label — line 94
+# variable: readme — line 96
+# variable: original — line 97
+# variable: end — line 98
+# variable: start — line 98
+# variable: expected — line 99
 # END CODE MAP
 
 from __future__ import annotations
@@ -32,6 +32,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BEGIN, END = "<!-- BEGIN FILE GUIDE -->", "<!-- END FILE GUIDE -->"
 SPECIAL = {
+    "docs/reports/windows-application-guide-1.1.0-r2.docx": "Current peer-reviewed installed app guide with actual screenshots and immutable code.",
+    "docs/reports/windows-application-guide-1.1.0-r2.json": "Exact guide, source, image and individually reviewed page identities.",
+    "docs/reports/installed-windows-1.1.0-r2-2026-11-11.md": "Observed installed workflows, delivery evidence, data preservation and practical limits.",
     "requirements-native.lock": "Exact complete hash-locked native freezing tool graph; no runtime setup dependency.",
     "docs/reports/project-guide.docx": "Reviewed Word project guide bound to the documented source revision.",
     "docs/reports/publications.json": "Exact Office digests, visual review scopes and immutable source baselines.",
